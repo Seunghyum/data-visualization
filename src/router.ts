@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import PageNotFound404 from './views/PageNotFound404.vue';
 import FineDust from './views/FineDust.vue';
 import FineDustSd from './components/FineDust/Sd.vue';
 import FineDustSgg from './components/FineDust/Sd.vue';
@@ -21,14 +22,15 @@ export default new Router({
       component: FineDust,
       children: [
         {
-          path: '/sd',
+          path: 'sd',
           component: FineDustSd
         },
         {
-          path: '/sgg',
+          path: 'sgg',
           component: FineDustSgg
         }
       ]
     },
+    { path: "*", component: PageNotFound404 }
   ],
 });
