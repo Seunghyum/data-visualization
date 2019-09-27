@@ -1,6 +1,6 @@
 <template lang="pug">
-  .home
-    h1 홈
+  .fine-dust
+    h1 미세먼지 페이지
 </template>
 
 <script lang="ts">
