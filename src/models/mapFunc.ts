@@ -9,8 +9,7 @@ export const addUnitToAirPol:{} = {
   NO2: "ppm"
 }
 
-
-export function getSearchQueryParam(param:string) {
+export function getSearchQueryParam(param:string | null):string | boolean {
   const result = window.location.search.match(
     new RegExp("(\\?|&)" + param + "(\\[\\])?=([^&]*)")
   );
@@ -19,22 +18,22 @@ export function getSearchQueryParam(param:string) {
 // url control
 export function changeLocationSearchParams(k:string | null, v:string | null) {
   if (getSearchQueryParam(k) == false) {
-    history.pushState(null, null, window.location.href + (window.location.search == "" ? "?" : "&") + k + "=" + v);
+    history.pushState(null, '', window.location.href + (window.location.search == "" ? "?" : "&") + k + "=" + v);
   } else if (getSearchQueryParam(k)) {
 
     const anotherTopic = (k == "airpol" ? "adrr" : "airpol");
 
     if (k == "sd") {
-      history.pushState(null, null, window.location.origin + window.location.pathname +
+      history.pushState(null, '', window.location.origin + window.location.pathname +
         "?sd=" + v
       );
     } else if (k == "sd" || k == "sgg") {
-      history.pushState(null, null, window.location.origin + window.location.pathname +
+      history.pushState(null, '', window.location.origin + window.location.pathname +
         "?sd=" + getSearchQueryParam("sd") +
         "&sgg=" + v
       );
     } else {
-      history.pushState(null, null, window.location.origin + window.location.pathname +
+      history.pushState(null, '', window.location.origin + window.location.pathname +
         "?sd=" + getSearchQueryParam("sd") +
         "&sgg=" + getSearchQueryParam("sgg") +
         ("&" + k + "=" + v) +
@@ -43,12 +42,3 @@ export function changeLocationSearchParams(k:string | null, v:string | null) {
     }
   }
 }
-
-// export function getUrlVars() {
-//   var vars = {};
-//   var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
-//   function(m,key,value) {
-//       vars[key] = value;
-//   });
-//   return vars;
-// }

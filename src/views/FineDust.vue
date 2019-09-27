@@ -3,7 +3,9 @@
     h1 미세먼지 페이지
     <router-view/>
 </template>
-
+<style lang="scss">
+  @import '@/assets/FineDust.scss';
+</style>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 

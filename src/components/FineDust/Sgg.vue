@@ -155,7 +155,6 @@
       this.get_sgg = mapFunc.getSearchQueryParam("sgg");
     },
     mounted () {
-      // this.urlSGGValue = mapFunc.getUrlVars()["sgg"];
       this.scale = this.$refs.airMap.clientWidth * 6;
       this.width = this.$refs.airMap.clientWidth;
       this.height = this.width;
@@ -347,7 +346,7 @@
             .append("span")
             .text(" " + d.properties.name + " : " + parseFloat(airpol_data.filter((item) => {
               return String(item.SGG_CD) === d.properties.sigungu_cd;
-            })[0][t]).toFixed(0) + " " + mapFunc.addUnitToAirPol(t));
+            })[0][t]).toFixed(0) + " " + mapFunc.addUnitToAirPol[t]);
         d3.select("#airMap").select("svg").selectAll(".sdGroup" + d.properties.sigungu_cd.substr(0,2))
           .classed("sdHover", true)
 
@@ -412,7 +411,7 @@
         if (id == "locationInfoBox1") {
           var outputText = String(parseFloat(airpol_data.filter((item) => {
             return String(item.SGG_CD) === dc;
-          })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol(t)
+          })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol[t]
         } else if (id == "locationInfoBox2" ) {
           var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.filter((item) => {
             return String(item.SGG_CD) === dc;
@@ -1059,7 +1058,7 @@
           tooltip.style.top =  (sideLocation.bottom + (sideLocation.top - sideLocation.bottom)/2 + window.scrollY) + "px"
           tooltip.style.left = (sideLocation.left + (sideLocation.right - sideLocation.left)/2) + "px"
           tooltip.style.pointerEvents = "none";
-          tooltip.innerHTML = sgg_nm + " : " + parseFloat(value).toFixed(topic == "RR" ? 3 : 0) + " " + mapFunc.addUnitToAirPol(topic)
+          tooltip.innerHTML = sgg_nm + " : " + parseFloat(value).toFixed(topic == "RR" ? 3 : 0) + " " + mapFunc.addUnitToAirPol[topic]
         }
       },  
       mapMouseOverDetailTooltip(map_hover, d, name, topic, adrr, u, center, l) {

@@ -63,10 +63,10 @@
 <script>
   const mapFunc = require("@/models/mapFunc")
   const sdVal = require("@/models/sdVal")
-  const mapData = require("@/data/municipalities-topo-simple.json")
-  const airpol_data = require("@/data/airpol.json")
-  const all_death_d3_data = require("@/data/all_death_d3.json")
-  const all_death_bar_chart_data = require("@/data/all_death_bar_chart_data.json")
+  const mapData = require("@/../data/municipalities-topo-simple.json")
+  const airpol_data = require("@/../data/airpol.json")
+  const all_death_d3_data = require("@/../data/all_death_d3.json")
+  const all_death_bar_chart_data = require("@/../data/all_death_bar_chart_data.json")
 
   export default {
     data () {
@@ -361,7 +361,7 @@
             .append("span")
             .text(" " + d.properties.name + " : " + parseFloat(airpol_data.filter((item) => {
               return String(item.SGG_CD) === d.properties.code;
-            })[0][t]).toFixed(0) + " " + mapFunc.addUnitToAirPol(t));
+            })[0][t]).toFixed(0) + " " + mapFunc.addUnitToAirPol[t]);
         d3.select("#airMap").select("svg").selectAll(".sdGroup" + d.properties.code.substr(0,2))
           .classed("sdHover", true)
 
@@ -478,7 +478,7 @@
         if (id == "locationInfoBox1") {
           var outputText = String(parseFloat(airpol_data.filter((item) => {
             return String(item.SGG_CD) === dc;
-          })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol(t)
+          })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol[t]
         } else if (id == "locationInfoBox2" ) {
           var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.filter((item) => {
             return String(item.SGG_CD) === dc;
@@ -666,6 +666,7 @@
 
         // 해당 토픽의 통계값 가져오기
         var topicStat = sdVal.sdAdrrStat[t];
+        console.log("topicStat : ", topicStat)
 
         d3.select("#adrrMap").select("svg").remove();
 
@@ -691,6 +692,7 @@
             return String(item.SGG_CD) == d.properties.code;
           })[0][t + "__" + r])
           d.properties.quantized = quantize(d.properties.value);
+          console.log("d.properties.quantized  : ", d.properties.quantized )
           });
           
           var adrr, ap, bar, tl, sideLocation;
