@@ -61,12 +61,12 @@
       .bottomForMobileView
 </template>
 <script>
-  var mapFunc = require("../models/mapFunc")
-  var sdVal = require("../models/sdVal")
-  var mapData = require("../seed/municipalities-topo-simple.json")
-  var airpol_data = require("../seed/airpol.json")
-  var all_death_d3_data = require("../seed/all_death_d3.json")
-  var all_death_bar_chart_data = require("../seed/all_death_bar_chart_data.json")
+  const mapFunc = require("@/models/mapFunc")
+  const sdVal = require("@/models/sdVal")
+  const mapData = require("@/data/municipalities-topo-simple.json")
+  const airpol_data = require("@/data/airpol.json")
+  const all_death_d3_data = require("@/data/all_death_d3.json")
+  const all_death_bar_chart_data = require("@/data/all_death_bar_chart_data.json")
 
   export default {
     data () {
@@ -480,7 +480,7 @@
             return String(item.SGG_CD) === dc;
           })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol(t)
         } else if (id == "locationInfoBox2" ) {
-          var outputText = mapFunc.adrrTranslate(r) + " : " + (all_death_d3_data.filter((item) => {
+          var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.filter((item) => {
             return String(item.SGG_CD) === dc;
           })[0][t + "__" + r])
         }

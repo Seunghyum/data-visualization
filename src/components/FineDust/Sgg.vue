@@ -155,7 +155,7 @@
       this.get_sgg = mapFunc.getSearchQueryParam("sgg");
     },
     mounted () {
-      this.urlSGGValue = mapFunc.getUrlVars()["sgg"];
+      // this.urlSGGValue = mapFunc.getUrlVars()["sgg"];
       this.scale = this.$refs.airMap.clientWidth * 6;
       this.width = this.$refs.airMap.clientWidth;
       this.height = this.width;
@@ -414,7 +414,7 @@
             return String(item.SGG_CD) === dc;
           })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol(t)
         } else if (id == "locationInfoBox2" ) {
-          var outputText = mapFunc.adrrTranslate(r) + " : " + (all_death_d3_data.filter((item) => {
+          var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.filter((item) => {
             return String(item.SGG_CD) === dc;
           })[0][t + "__" + r])
         }
@@ -1008,7 +1008,7 @@
           .attr("dy", "-0.5em")
           .style("text-anchor", "end")
           .style('font-weight','bold')
-          .text(mapFunc.adrrTranslate(r));
+          .text(mapFunc.adrrTranslate[r]);
           
         document.getElementById("barChart").onscroll = function() {
           yAxis.attr("transform", "translate(" + this.scrollLeft + ",0)")
@@ -1075,7 +1075,7 @@
           tooltip3.innerHTML = 
           "지역 : " + name + "</br>" + 
           "미세먼지 변수 : " + topic + "</br>" + 
-          mapFunc.adrrTranslate(adrr) + " : </br>" + 
+          mapFunc.adrrTranslate[adrr] + " : </br>" + 
           "U : " + u +"</br>" +
           "center : " + center + "</br>" +
           "L : " + l;
