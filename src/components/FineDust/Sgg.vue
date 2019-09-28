@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div.pt-5.pb-5.pr-5.pl-5.mt-4
     .mobile-toggle-wrapper
       .form-location-wrapper
         .row

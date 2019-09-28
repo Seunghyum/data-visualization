@@ -12,7 +12,7 @@
           router-link.btn.btn-outline-dark.btn-md.js-scroll-trigger(to='/finedust/sd' @click.prevent="isSdActive=!isSdActive" :class="{ hover: isSdActive }") 시도
           router-link.btn.btn-outline-dark.btn-md.js-scroll-trigger(to='/finedust/sgg' @click.prevent="isSggActive=!isSggActive" :class="{ hover: isSggActive }") 시군구
       
-      .finedust-page-wrapper.pt-5.pb-5.pr-5.pl-5.mt-4
+      .finedust-page-wrapper
         router-view
       .pb-5
 </template>
