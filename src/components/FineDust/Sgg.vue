@@ -1,80 +1,74 @@
 <template lang="pug">
-  .bg-white
-    .container
-    br
-      .mobile-toggle-wrapper
-        #form-toogle-btn.text-center
-          img(src="https://png.icons8.com/windows/50/8D8D8D/expand-arrow.png", style="width: 12px;margin-top: -18px;")
-        .form-location-wrapper
-          .row
-            .col-sm-2
-            .col-sm-8.without_side_pd
-              form.text-center
-                b-form-select#location.custom-select(v-model="locaOptionsSelected", 
-                                  @input="locationChange(locaOptionsSelected)",
-                                  :options="locaOptions")
-
-        .form-wrapper.toggleDown
-          .row
-            .col-sm-2.form-border-bottom
-            .col-sm-8.without_side_pd
-              #airPolTab
-                form
-                  b-form-radio-group(id="radios2" name="airf")
-                    ul.nav.nav-tabs.justify-content-center
-                      li.nav-item.col-4.without_side_pd.text-center
-                        a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM2_5'}", @click.prevent="airPolActiveLink('PM2_5')")
-                          | PM&nbsp;
-                          sub.underText 2.5
-                      li.nav-item.col-4.without_side_pd.text-center
-                        a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM10'}", @click.prevent="airPolActiveLink('PM10')")
-                          | PM&nbsp;
-                          sub.underText 10
-                      li.nav-item.col-4.without_side_pd.text-center
-                        a.nav-link.airPolTab(:class="{ active: airpol_params == 'NO2'}", @click.prevent="airPolActiveLink('NO2')")
-                          | NO&nbsp;
-                          sub.underText 2
-            .col-sm-2.form-border-bottom
+  div
+    .mobile-toggle-wrapper
+      .form-location-wrapper
         .row
-          .col-12.subform
-            #addrForm
-              form.text-center
-                b-form-group.mg-btm-0
-                  b-form-radio-group(v-model="adrr_params"
-                            @input="adrrChanged(adrr_params)"
-                            :options="adrrOptions"
-                            name="addr")
-              
-        br
-      
-      .row
-        .col-md-6.without_side_pd
-          .upperline
-          h4.subtitle 대기오염물질
-          div(ref="airMap", id="airMap")
-          
-          br
-        .col-md-6.without_side_pd
-          .upperline
-          h4.subtitle 전체 사망 위험
-          div(ref="adrrMap", id="adrrMap")
-      .row
-        .col-md-12.without_side_pd
-          .upperline
-          h4.subtitle#barGraphTitle 지역별 상대 위험도 or 지역별 초과 사망자수
-          div(ref="barChart", id="barChart")
-      .bottomForMobileView
+          .col-sm-2
+          .col-sm-8.without_side_pd
+            form.text-center
+              b-form-select#location.custom-select(v-model="locaOptionsSelected", 
+                                @input="locationChange(locaOptionsSelected)",
+                                :options="locaOptions")
 
+      .form-wrapper.toggleDown
+        .row
+          .col-sm-2.form-border-bottom
+          .col-sm-8.without_side_pd
+            #airPolTab
+              form
+                b-form-radio-group(id="radios2" name="airf")
+                  ul.nav.nav-tabs.justify-content-center
+                    li.nav-item.col-4.without_side_pd.text-center
+                      a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM2_5'}", @click.prevent="airPolActiveLink('PM2_5')")
+                        | PM&nbsp;
+                        sub.underText 2.5
+                    li.nav-item.col-4.without_side_pd.text-center
+                      a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM10'}", @click.prevent="airPolActiveLink('PM10')")
+                        | PM&nbsp;
+                        sub.underText 10
+                    li.nav-item.col-4.without_side_pd.text-center
+                      a.nav-link.airPolTab(:class="{ active: airpol_params == 'NO2'}", @click.prevent="airPolActiveLink('NO2')")
+                        | NO&nbsp;
+                        sub.underText 2
+          .col-sm-2.form-border-bottom
+      .row
+        .col-12.subform
+          #addrForm
+            form.text-center
+              b-form-group.mg-btm-0
+                b-form-radio-group(v-model="adrr_params"
+                          @input="adrrChanged(adrr_params)"
+                          :options="adrrOptions"
+                          name="addr")
+            
+      br
+    
+    .row
+      .col-md-6.without_side_pd
+        .upperline
+        h4.subtitle 대기오염물질
+        div(ref="airMap", id="airMap")
+        
+        br
+      .col-md-6.without_side_pd
+        .upperline
+        h4.subtitle 전체 사망 위험
+        div(ref="adrrMap", id="adrrMap")
+    .row
+      .col-md-12.without_side_pd
+        .upperline
+        h4.subtitle#barGraphTitle 지역별 상대 위험도 or 지역별 초과 사망자수
+        div(ref="barChart", id="barChart")
+    .bottomForMobileView
 </template>
 
 <script>
-  var mapFunc = require("../models/mapFunc")
-  var sdVal = require("../models/sdVal")
-  var sggAdrrStat = require("../seed/sggAdrrStat.json")
-  var sggAirPolStat = require("../seed/sggAirPolStat.json")
-  var airpol_data = require("../seed/airpol.json")
-  var all_death_d3_data = require("../seed/all_death_d3.json")
-  var all_death_bar_chart_data = require("../seed/all_death_bar_chart_data.json")
+  const mapFunc = require("@/models/mapFunc")
+  const sdVal = require("@/models/sdVal")
+  const mapData = require("@/../data/municipalities-topo-simple.json")
+  const airpol_data = require("@/../data/airpol.json")
+  const all_death_d3_data = require("@/../data/all_death_d3.json")
+  const all_death_bar_chart_data = require("@/../data/all_death_bar_chart_data.json")
 
   export default {
     data () {
