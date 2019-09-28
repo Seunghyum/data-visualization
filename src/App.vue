@@ -1,13 +1,15 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">홈</router-link>
-      <router-link to="/finedust">지역별 미세먼지</router-link>
-    </div>
+    <navigation/>
     <router-view/>
   </div>
 </template>
-
-<style lang="scss" scoped>
-
-</style>
+<script lang="ts">
+import Vue from 'vue'
+import Navigation from '@/components/common/Navigation.vue';
+export default Vue.extend({
+  components: {
+    Navigation
+  }
+})
+</script>
