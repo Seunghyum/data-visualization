@@ -159,9 +159,7 @@
       var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
         clicked_ap = this.clicked_area ? document.getElementById(k.properties.code) : null;
 
-      var k = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.filter(function(g){
-        return g.properties.code === mapFunc.getSearchQueryParam("sgg");
-      })[0];
+      var k = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.find((g) => g.properties.code === mapFunc.getSearchQueryParam("sgg"));
 
       if(k) {
         this.magnifyMap(k, d3.select("#airpolGroup"), d3.select("#adrrGroup"), 0);
@@ -186,9 +184,7 @@
 
       // 지역 input창만 선택시 확인
       if (this.get_sd != "none" && this.get_sgg == "none") {
-        var d = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.filter(function(g){
-          return g.properties.code.substring(0,2) == this.get_sd && g.properties.name == codeToCenterLocation[g.properties.code.substring(0,2)]
-        })[0]
+        var d = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.find((g) => g.properties.code.substring(0,2) == this.get_sd && g.properties.name == codeToCenterLocation[g.properties.code.substring(0,2)])
         var x, y, k;
         x = this.path.centroid(d)[0]
         y = this.path.centroid(d)[1]
@@ -229,9 +225,7 @@
         
         mapFunc.changeLocationSearchParams("adrr", ap);
         
-        var k = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.filter(function(g){
-          return g.properties.code === mapFunc.getSearchQueryParam("sgg");
-        })[0]
+        var k = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.find((g) => g.properties.code === mapFunc.getSearchQueryParam("sgg"))
         if(k) {
           var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
             clicked_ap = this.clicked_area ? document.getElementById(k.properties.code) : null;
@@ -270,9 +264,7 @@
 
         mapFunc.changeLocationSearchParams("airpol", this.airpol_params);
         
-        var k = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.filter(function(g){
-          return g.properties.code === mapFunc.getSearchQueryParam("sgg");
-        })[0]
+        var k = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.find((g) => g.properties.code === mapFunc.getSearchQueryParam("sgg"))
         if(k) {
 
           var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
@@ -307,9 +299,7 @@
         mapFunc.changeLocationSearchParams("airpol", airpol);
         mapFunc.changeLocationSearchParams("adrr", adrr);
         
-        var d = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.filter(function(g){
-          return g.properties.code.substring(0,2) == location_value && g.properties.name == sdVal.codeToCenterLocation[g.properties.code.substring(0,2)]
-        })[0]
+        var d = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features.find((g) => g.properties.code.substring(0,2) == location_value && g.properties.name == sdVal.codeToCenterLocation[g.properties.code.substring(0,2)])
         
         var x, y, k;
 
@@ -355,9 +345,7 @@
             .append("br")
           tooltip1  
             .append("span")
-            .text(" " + d.properties.name + " : " + parseFloat(airpol_data.filter((item) => {
-              return String(item.SGG_CD) === d.properties.code;
-            })[0][t]).toFixed(0) + " " + mapFunc.addUnitToAirPol[t]);
+            .text(" " + d.properties.name + " : " + parseFloat(airpol_data.find((item) => item.SGG_CD === d.properties.code)[t]).toFixed(0) + " " + mapFunc.addUnitToAirPol[t]);
         d3.select("#airMap").select("svg").selectAll(".sdGroup" + d.properties.code.substr(0,2))
           .classed("sdHover", true)
 
@@ -374,9 +362,7 @@
             .append("br")
           tooltip2
             .append("span")
-            .text(" " + d.properties.name + " : " + parseFloat(all_death_d3_data.filter((item) => {
-              return String(item.SGG_CD) === d.properties.code;
-            })[0][t + "__" + r]).toFixed(0) )  
+            .text(" " + d.properties.name + " : " + parseFloat(all_death_d3_data.find((item) => item.SGG_CD === d.properties.code)[t + "__" + r]).toFixed(0) )  
         d3.select("#adrrMap").select("svg").selectAll(".sdGroup" + d.properties.code.substr(0,2))
         //   this.svg2.selectAll(".sdGroup" + d.properties.code.substr(0,2))
           .classed("sdHover", true)
@@ -472,13 +458,9 @@
       // 상세보기 Box 변경
       changeLocationInfoBoxInMap(id, dc, dn, t, r){
         if (id == "locationInfoBox1") {
-          var outputText = String(parseFloat(airpol_data.filter((item) => {
-            return String(item.SGG_CD) === dc;
-          })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol[t]
+          var outputText = String(parseFloat(airpol_data.find((item) => item.SGG_CD === dc)[t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol[t]
         } else if (id == "locationInfoBox2" ) {
-          var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.filter((item) => {
-            return String(item.SGG_CD) === dc;
-          })[0][t + "__" + r])
+          var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.find((item) => item.SGG_CD === dc)[t + "__" + r])
         }
         
         var legend_mg = 6;
@@ -573,9 +555,7 @@
           var features = topojson.feature(d, d.objects["municipalities-geo"]).features;
           
           features.forEach(function(d) {
-            d.properties.value = airpol_data.filter((item) => {
-              return String(item.SGG_CD) == d.properties.code;
-            })[0][t];
+            d.properties.value = airpol_data.find((item) => item.SGG_CD == d.properties.code)[t];
             d.properties.quantized = quantize(d.properties.value);
           });
 
@@ -662,7 +642,6 @@
 
         // 해당 토픽의 통계값 가져오기
         var topicStat = sdVal.sdAdrrStat[t];
-        console.log("topicStat : ", topicStat)
 
         d3.select("#adrrMap").select("svg").remove();
 
@@ -684,11 +663,8 @@
         function ready(d) {
           var features = topojson.feature(d, d.objects["municipalities-geo"]).features;
           features.forEach(function(d) {
-          d.properties.value = (all_death_d3_data.filter((item) => {
-            return String(item.SGG_CD) == d.properties.code;
-          })[0][t + "__" + r])
+          d.properties.value = (all_death_d3_data.find((item) => item.SGG_CD == d.properties.code)[t + "__" + r])
           d.properties.quantized = quantize(d.properties.value);
-          console.log("d.properties.quantized  : ", d.properties.quantized )
           });
           
           var adrr, ap, bar, tl, sideLocation;

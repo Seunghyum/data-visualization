@@ -6,7 +6,7 @@ export const adrrTranslate:{} = {
 export const addUnitToAirPol:{} = {
   PM2_5: "㎍/㎥",
   PM10: "㎍/㎥",
-  NO2: "ppm"
+  NO2: "ppm",
 }
 
 export function getSearchQueryParam(param:string | null):string | boolean {

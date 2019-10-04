@@ -16,7 +16,7 @@
                                   @input="locationChange(locaOptionsSelected)",
                                   :options="locaOptions")
 
-        .form-wrapper.toggleDown
+        .form-wrapper.toggleDown.mt-4
           .row
             .col-sm-2.form-border-bottom
             .col-sm-8.without_side_pd
@@ -39,7 +39,7 @@
             .col-sm-2.form-border-bottom
         .row
           .col-12.subform
-            #addrForm
+            #addrForm.mt-4
               form.text-center
                 b-form-group.mg-btm-0
                   b-form-radio-group(v-model="adrr_params"
@@ -71,6 +71,8 @@
 <script>
   const mapFunc = require("@/models/mapFunc")
   const sdVal = require("@/models/sdVal")
+  const sggAdrrStat = require("@/../data/sggAdrrStat.json")
+  const sggAirPolStat = require("@/../data/sggAirPolStat.json")
   const mapData = require("@/../data/municipalities-topo-simple.json")
   const airpol_data = require("@/../data/airpol.json")
   const all_death_d3_data = require("@/../data/all_death_d3.json")
@@ -119,8 +121,8 @@
         clicked_ap: null,
         centered: null,
         locationInfoBox: null,
-        // geoJsonData: map_11,
-        geoJsonData: null,
+        geoJsonData: mapData,
+        // geoJsonData: null,
         clicked_area: null,
         
         get_sd: null,
@@ -175,20 +177,24 @@
       d3.select('#tooltip3')
         .attr('class', 'hidden fd-tooltip');
 
-      this.axios.get('/sgg_map', {params: {sd_cd: mapFunc.getSearchQueryParam("sd")}})
-        .then(res => {
-          console.log("------res.data.result : ", res.data.result)
-          this.geoJsonData = res.data.result;
-          this.changeAdRrMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
-          this.changeAirMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
-          this.drawBarChart(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
-        })
-        .catch(e => {
-          console.log(e)
-        })
-      
-      var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.sigungu_cd) : null,
-        clicked_ap = this.clicked_area ? document.getElementById(k.properties.sigungu_cd) : null;
+      // this.axios.get('/sgg_map', {params: {sd_cd: mapFunc.getSearchQueryParam("sd")}})
+      //   .then(res => {
+      //     console.log("------res.data.result : ", res.data.result)
+      //     // this.geoJsonData = res.data.result;
+      //     this.changeAdRrMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+      //     this.changeAirMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+      //     this.drawBarChart(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+      //   })
+      //   .catch(e => {
+      //     console.log(e)
+      //   })
+  
+      this.changeAdRrMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+      this.changeAirMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+      this.drawBarChart(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+
+      var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
+        clicked_ap = this.clicked_area ? document.getElementById(k.properties.code) : null;
     },
     methods: {
       adrrChanged(ap) {
@@ -204,15 +210,13 @@
         
         mapFunc.changeLocationSearchParams("adrr", ap);
         
-        var k = this.geoJsonData.features.filter(function(g){
-          return g.properties.sigungu_cd === mapFunc.getSearchQueryParam("sgg");
-        })[0]
+        var k = this.geoJsonData.features.find((g) => g.properties.code === mapFunc.getSearchQueryParam("sgg"))
         if(k) {
-          var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.sigungu_cd) : null,
-            clicked_ap = this.clicked_area ? document.getElementById(k.properties.sigungu_cd) : null;
+          var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
+            clicked_ap = this.clicked_area ? document.getElementById(k.properties.code) : null;
 
-          var adrr = document.getElementById("adrr_" + k.properties.sigungu_cd),
-            ap = document.getElementById(k.properties.sigungu_cd);
+          var adrr = document.getElementById("adrr_" + k.properties.code),
+            ap = document.getElementById(k.properties.code);
           adrr.classList.add("hover");
           ap.classList.add("hover")
           adrr.classList.toggle("selected")
@@ -224,8 +228,8 @@
           clicked_adrr = adrr;
           clicked_ap = ap;
           
-          this.changeLocationInfoBoxInMap("locationInfoBox1", k.properties.sigungu_cd, k.properties.name, this.airpol_params, this.adrr_params)
-          this.changeLocationInfoBoxInMap("locationInfoBox2", k.properties.sigungu_cd, k.properties.name, this.airpol_params, this.adrr_params)
+          this.changeLocationInfoBoxInMap("locationInfoBox1", k.properties.code, k.properties.name, this.airpol_params, this.adrr_params)
+          this.changeLocationInfoBoxInMap("locationInfoBox2", k.properties.code, k.properties.name, this.airpol_params, this.adrr_params)
         }
       },
       airPolActiveLink(linkIdent) {
@@ -245,16 +249,13 @@
 
         mapFunc.changeLocationSearchParams("airpol", this.airpol_params);
         
-        var k = this.geoJsonData.features.filter(function(g){
-          return g.properties.sigungu_cd === mapFunc.getSearchQueryParam("sgg");
-        })[0]
+        var k = this.geoJsonData.features.find((g) => g.properties.code === mapFunc.getSearchQueryParam("sgg"))
         if(k) {
-
-          var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.sigungu_cd) : null,
-            clicked_ap = this.clicked_area ? document.getElementById(k.properties.sigungu_cd) : null;
+          var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
+            clicked_ap = this.clicked_area ? document.getElementById(k.properties.code) : null;
           
-          var adrr = document.getElementById("adrr_" + k.properties.sigungu_cd),
-          ap = document.getElementById(k.properties.sigungu_cd);
+          var adrr = document.getElementById("adrr_" + k.properties.code),
+          ap = document.getElementById(k.properties.code);
           adrr.classList.add("hover");
           ap.classList.add("hover")
           adrr.classList.toggle("selected")
@@ -266,66 +267,59 @@
           clicked_adrr = adrr;
           clicked_ap = ap;
           
-          this.changeLocationInfoBoxInMap("locationInfoBox1", k.properties.sigungu_cd, k.properties.name, this.airpol_params, this.adrr_params)
-          this.changeLocationInfoBoxInMap("locationInfoBox2", k.properties.sigungu_cd, k.properties.name, this.airpol_params, this.adrr_params)
+          this.changeLocationInfoBoxInMap("locationInfoBox1", k.properties.code, k.properties.name, this.airpol_params, this.adrr_params)
+          this.changeLocationInfoBoxInMap("locationInfoBox2", k.properties.code, k.properties.name, this.airpol_params, this.adrr_params)
         }
       },
       // 지역 값 변경 폼
       locationChange(los) {
-        this.axios.get('/sgg_map', {params: {sd_cd: los}})
-          .then(res => {
-            this.geoJsonData = res.data.result
-            this.locaOptionsSelected = los;
-            this.airpol_params = mapFunc.getSearchQueryParam("airpol");
-            this.adrr_params = mapFunc.getSearchQueryParam("adrr"); 
-            
-            mapFunc.changeLocationSearchParams("sd", (los != "none" ? los.substring(0,2) : "none"));
-            mapFunc.changeLocationSearchParams("sgg", "none");
-            mapFunc.changeLocationSearchParams("airpol", this.airpol_params);
-            mapFunc.changeLocationSearchParams("adrr", this.adrr_params);
-            
-            var d = this.geoJsonData.features.filter(function(g){
-              return g.properties.sigungu_cd.substring(0,2) == los && g.properties.name == sdVal.codeToCenterLocation[g.properties.sigungu_cd.substring(0,2)]
-            })[0]
-            
-            var x, y, k;
+        this.locaOptionsSelected = los;
+        this.airpol_params = mapFunc.getSearchQueryParam("airpol");
+        this.adrr_params = mapFunc.getSearchQueryParam("adrr"); 
+        
+        mapFunc.changeLocationSearchParams("sd", (los != "none" ? los.substring(0,2) : "none"));
+        mapFunc.changeLocationSearchParams("sgg", "none");
+        mapFunc.changeLocationSearchParams("airpol", this.airpol_params);
+        mapFunc.changeLocationSearchParams("adrr", this.adrr_params);
+        
 
-            if (d) {
-              x = this.path.centroid(d)[0]
-              y = this.path.centroid(d)[1]
-              // 서울(11)은 시군구 크기가 작아서 더 크게 확대
-              if (["11", "21", "26"].includes(los))  {
-                k = 10;
-              } else if (["29", "24", "22", "25"].includes(los)){
-                k = 15;
-              } else {
-                k = 4;
-              }
-            } else {
-              x = this.width >= 450 ? 285 : 285/2;
-              y = this.width >= 450 ? 285 : 285/2;
-              k = 1;
-            }
+        var features = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features;
+        var d = features.find((g) => g.properties.code.substring(0,2) == los && g.properties.name == sdVal.codeToCenterLocation[g.properties.code.substring(0,2)])
+        
+        var x, y, k;
 
-            // 지도 확대 
-            d3.select("#airpolGroup").transition()
-              .duration(750)
-              .attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-              .style("stroke-width", 1.5 / k + "px");
-          
-          
-            d3.select("#adrrGroup").transition()
-              .duration(750)
-              .attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-              .style("stroke-width", 1.5 / k + "px");
-            
-            this.changeAdRrMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
-            this.changeAirMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
-            this.drawBarChart(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
-          })
-          .catch(e => {
-            console.log(e)
-          })
+        if (d) {
+          x = this.path.centroid(d)[0]
+          y = this.path.centroid(d)[1]
+          // 서울(11)은 시군구 크기가 작아서 더 크게 확대
+          if (["11", "21", "26"].includes(los))  {
+            k = 10;
+          } else if (["29", "24", "22", "25"].includes(los)){
+            k = 15;
+          } else {
+            k = 4;
+          }
+        } else {
+          x = this.width >= 450 ? 285 : 285/2;
+          y = this.width >= 450 ? 285 : 285/2;
+          k = 1;
+        }
+
+        // 지도 확대 
+        d3.select("#airpolGroup").transition()
+          .duration(750)
+          .attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px");
+      
+      
+        d3.select("#adrrGroup").transition()
+          .duration(750)
+          .attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px");
+        
+        this.changeAdRrMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+        this.changeAirMap(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
+        this.drawBarChart(this.airpol_params, this.adrr_params, mapFunc.getSearchQueryParam("sd"));
       },
       // Hover 시 tooltip 변경
       changeHoverToolTip(d, tl, sideLocation, t, r) {
@@ -336,15 +330,13 @@
             .style("left", (tl.right-100) + "px")
           tooltip1
             .append("span")
-            .text("시도 : " +  sdVal.codeToSD[d.properties.sigungu_cd.substr(0,2)])
+            .text("시도 : " +  sdVal.codeToSD[d.properties.code.substr(0,2)])
           tooltip1
             .append("br")
           tooltip1  
             .append("span")
-            .text(" " + d.properties.name + " : " + parseFloat(airpol_data.filter((item) => {
-              return String(item.SGG_CD) === d.properties.sigungu_cd;
-            })[0][t]).toFixed(0) + " " + mapFunc.addUnitToAirPol[t]);
-        d3.select("#airMap").select("svg").selectAll(".sdGroup" + d.properties.sigungu_cd.substr(0,2))
+            .text(" " + d.properties.name + " : " + parseFloat(airpol_data.find((item) => item.SGG_CD === d.properties.code)[t]).toFixed(0) + " " + mapFunc.addUnitToAirPol[t]);
+        d3.select("#airMap").select("svg").selectAll(".sdGroup" + d.properties.code.substr(0,2))
           .classed("sdHover", true)
 
         var tooltip2 = d3.select("#tooltip2");
@@ -355,16 +347,14 @@
             .style("z-index", 999)
           tooltip2
             .append("span")
-            .text("시도 : " +  sdVal.codeToSD[d.properties.sigungu_cd.substr(0,2)])
+            .text("시도 : " +  sdVal.codeToSD[d.properties.code.substr(0,2)])
           tooltip2
             .append("br")
           tooltip2
             .append("span")
-            .text(" " + d.properties.name + " : " + parseFloat(all_death_d3_data.filter((item) => {
-              return String(item.SGG_CD) === d.properties.sigungu_cd;
-            })[0][t + "__" + r]).toFixed(0) )  
-        d3.select("#adrrMap").select("svg").selectAll(".sdGroup" + d.properties.sigungu_cd.substr(0,2))
-        //   this.svg2.selectAll(".sdGroup" + d.properties.sigungu_cd.substr(0,2))
+            .text(" " + d.properties.name + " : " + parseFloat(all_death_d3_data.find((item) => item.SGG_CD === d.properties.code)[t + "__" + r]).toFixed(0) )  
+        d3.select("#adrrMap").select("svg").selectAll(".sdGroup" + d.properties.code.substr(0,2))
+        //   this.svg2.selectAll(".sdGroup" + d.properties.code.substr(0,2))
           .classed("sdHover", true)
       },
       // legendbox 초기화
@@ -406,13 +396,9 @@
       // 상세보기 Box 변경
       changeLocationInfoBoxInMap(id, dc, dn, t, r){
         if (id == "locationInfoBox1") {
-          var outputText = String(parseFloat(airpol_data.filter((item) => {
-            return String(item.SGG_CD) === dc;
-          })[0][t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol[t]
+          var outputText = String(parseFloat(airpol_data.find((item) => item.SGG_CD === dc)[t]).toFixed(0))  + " " + mapFunc.addUnitToAirPol[t]
         } else if (id == "locationInfoBox2" ) {
-          var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.filter((item) => {
-            return String(item.SGG_CD) === dc;
-          })[0][t + "__" + r])
+          var outputText = mapFunc.adrrTranslate[r] + " : " + (all_death_d3_data.find((item) => item.SGG_CD === dc)[t + "__" + r])
         }
         
         var legend_mg = 6;
@@ -456,9 +442,7 @@
           .projection(this.projection);
 
         // 해당 토픽의 통계값 가져오기
-        var topicStat = sggAirPolStat.filter((item) => {
-          return item.SD_CD == this.get_sd;
-        })[0];
+        var topicStat = sggAirPolStat.find((item) => item.SD_CD == this.get_sd);
 
         d3.select("#airMap").select("svg").remove();
 
@@ -485,12 +469,10 @@
         ready(this.geoJsonData);
         
         function ready(d) {
-          var features = d.features;
+          var features = topojson.feature(d, d.objects["municipalities-geo"]).features;
           
           features.forEach(function(d) {
-            d.properties.value = airpol_data.filter((item) => {
-              return String(item.SGG_CD) == d.properties.sigungu_cd;
-            })[0][t];
+            d.properties.value = airpol_data.find((item) => item.SGG_CD == d.properties.code)[t];
             d.properties.quantized = quantize(d.properties.value);
           });
           // console.log("features : ", features)
@@ -502,25 +484,19 @@
             .data(features)
             .enter().append("path")
             .attr("class", function(d) { 
-              return "municipality " + d.properties.quantized + " sdGroup" + d.properties.sigungu_cd.substr(0,2); 
+              return "municipality " + d.properties.quantized + " sdGroup" + d.properties.code.substr(0,2); 
             })
             .on('mouseenter', function(d) {
-              ap = document.getElementById(d.properties.sigungu_cd);
-              adrr = document.getElementById("adrr_" + d.properties.sigungu_cd);
-              bar = document.getElementById("bar_" + d.properties.sigungu_cd);
+              ap = document.getElementById(d.properties.code);
+              adrr = document.getElementById("adrr_" + d.properties.code);
+              bar = document.getElementById("bar_" + d.properties.code);
 
-              var apd = airpol_data.filter((item) => {
-                  return String(item.SGG_CD) === String(d.properties.sigungu_cd);
-                })[0][t];
-              var ad_data = all_death_d3_data.filter((item) => {
-                  return String(item.SGG_CD) === String(d.properties.sigungu_cd);
-                })[0][t + "__" + r];
-              adbc_data = adbc.filter((item) => {
-                  return String(item.SGG_CD) === String(d.properties.sigungu_cd)
-                })[0]
+              var apd = airpol_data.find((item) => item.SGG_CD === d.properties.code)[t];
+              var ad_data = all_death_d3_data.find((item) => item.SGG_CD === d.properties.code)[t + "__" + r];
+              adbc_data = adbc.find((item) => item.SGG_CD === d.properties.code)
               
-              that.mapMouseOverTooltip(tooltip1, ap, d.properties.sigungu_cd, d.properties.name, apd, t);
-              that.mapMouseOverTooltip(tooltip2, adrr, d.properties.sigungu_cd, d.properties.name, ad_data, r);
+              that.mapMouseOverTooltip(tooltip1, ap, d.properties.code, d.properties.name, apd, t);
+              that.mapMouseOverTooltip(tooltip2, adrr, d.properties.code, d.properties.name, ad_data, r);
               that.mapMouseOverDetailTooltip(bar, d, d.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
             })
             .on('mouseleave', function(d) {
@@ -535,13 +511,13 @@
                 mapFunc.changeLocationSearchParams("airpol", t);
                 mapFunc.changeLocationSearchParams("adrr", r);
               } else {
-                mapFunc.changeLocationSearchParams("sd", d.properties.sigungu_cd.substr(0,2));
-                mapFunc.changeLocationSearchParams("sgg", d.properties.sigungu_cd);
+                mapFunc.changeLocationSearchParams("sd", d.properties.code.substr(0,2));
+                mapFunc.changeLocationSearchParams("sgg", d.properties.code);
                 mapFunc.changeLocationSearchParams("airpol", t);
                 mapFunc.changeLocationSearchParams("adrr", r);
               }
-              var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.sigungu_cd) : null,
-                clicked_ap = this.clicked_area ? document.getElementById(k.properties.sigungu_cd) : null;
+              var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
+                clicked_ap = this.clicked_area ? document.getElementById(k.properties.code) : null;
               // 지도 path 클릭 효과
               adrr.classList.toggle("selected")
               ap.classList.toggle("selected");
@@ -551,12 +527,12 @@
               }
               clicked_adrr = adrr;
               clicked_ap = ap;
-              that.changeInfoBoxInBarChart(sdVal.codeToSD[d.properties.sigungu_cd.substr(0,2)], d.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
-              that.changeLocationInfoBoxInMap("locationInfoBox1", d.properties.sigungu_cd, d.properties.name, t, r)
-              that.changeLocationInfoBoxInMap("locationInfoBox2", d.properties.sigungu_cd, d.properties.name, t, r)
+              that.changeInfoBoxInBarChart(sdVal.codeToSD[d.properties.code.substr(0,2)], d.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
+              that.changeLocationInfoBoxInMap("locationInfoBox1", d.properties.code, d.properties.name, t, r)
+              that.changeLocationInfoBoxInMap("locationInfoBox2", d.properties.code, d.properties.name, t, r)
             })
             .attr("d", that.path)
-            .attr("id", function(d) { return d.properties.sigungu_cd; })
+            .attr("id", function(d) { return d.properties.code; })
           
           var legend = d3.legend.color()
             .labelFormat(d3.format( ".0f"))
@@ -583,9 +559,7 @@
           .projection(this.projection);
 
         // 해당 토픽의 통계값 가져오기
-        var topicStat = sggAdrrStat.filter((item) => {
-          return item.SD_CD == this.get_sd;
-        })[0];
+        var topicStat = sggAdrrStat.find((item) =>  item.SD_CD == this.get_sd);
 
         d3.select("#adrrMap").select("svg").remove();
 
@@ -626,11 +600,10 @@
         ready(this.geoJsonData);
 
         function ready(d) {
-          var features = d.features;
+          // var features = d.features;
+          var features = topojson.feature(d, d.objects["municipalities-geo"]).features;
           features.forEach(function(d) {
-            d.properties.value = (all_death_d3_data.filter((item) => {
-              return String(item.SGG_CD) == d.properties.sigungu_cd;
-            })[0][t + "__" + r])
+            d.properties.value = all_death_d3_data.find((item) => item.SGG_CD == d.properties.code)[t + "__" + r]
             d.properties.quantized = quantize(d.properties.value);
           });
           
@@ -640,25 +613,19 @@
           map_g.selectAll("path")
             .data(features)
             .enter().append("path")
-            .attr("class", function(d) { return "municipality " + d.properties.quantized + " sdGroup" + d.properties.sigungu_cd.substr(0,2); })
+            .attr("class", function(d) { return "municipality " + d.properties.quantized + " sdGroup" + d.properties.code.substr(0,2); })
             .on('mouseenter', function(d) {
-              adrr = document.getElementById("adrr_" + d.properties.sigungu_cd);
-              ap = document.getElementById(d.properties.sigungu_cd);
-              bar = document.getElementById("bar_" + d.properties.sigungu_cd);
+              adrr = document.getElementById("adrr_" + d.properties.code);
+              ap = document.getElementById(d.properties.code);
+              bar = document.getElementById("bar_" + d.properties.code);
 
-              var apd = airpol_data.filter((item) => {
-                  return String(item.SGG_CD) === String(d.properties.sigungu_cd);
-                })[0][t];
-              var ad_data = all_death_d3_data.filter((item) => {
-                  return String(item.SGG_CD) === String(d.properties.sigungu_cd);
-                })[0][t + "__" + r];
+              var apd = airpol_data.find((item) => item.SGG_CD === d.properties.code)[t];
+              var ad_data = all_death_d3_data.find((item) => item.SGG_CD === d.properties.code)[t + "__" + r];
               
-              adbc_data = adbc.filter((item) => {
-                  return String(item.SGG_CD) === String(d.properties.sigungu_cd)
-                })[0]
+              adbc_data = adbc.find((item) => item.SGG_CD === d.properties.code)
             
-              that.mapMouseOverTooltip(tooltip1, ap, d.properties.sigungu_cd, d.properties.name, apd, t);
-              that.mapMouseOverTooltip(tooltip2, adrr, d.properties.sigungu_cd, d.properties.name, ad_data, r);
+              that.mapMouseOverTooltip(tooltip1, ap, d.properties.code, d.properties.name, apd, t);
+              that.mapMouseOverTooltip(tooltip2, adrr, d.properties.code, d.properties.name, ad_data, r);
               that.mapMouseOverDetailTooltip(bar, d, d.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
             })
             .on('mouseleave', function(d) {
@@ -673,13 +640,13 @@
                 mapFunc.changeLocationSearchParams("airpol", t);
                 mapFunc.changeLocationSearchParams("adrr", r);
               } else {
-                mapFunc.changeLocationSearchParams("sd", d.properties.sigungu_cd.substr(0,2));
-                mapFunc.changeLocationSearchParams("sgg", d.properties.sigungu_cd);
+                mapFunc.changeLocationSearchParams("sd", d.properties.code.substr(0,2));
+                mapFunc.changeLocationSearchParams("sgg", d.properties.code);
                 mapFunc.changeLocationSearchParams("airpol", t);
                 mapFunc.changeLocationSearchParams("adrr", r);
               }
-              var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.sigungu_cd) : null,
-                clicked_ap = this.clicked_area ? document.getElementById(k.properties.sigungu_cd) : null;
+              var clicked_adrr = this.clicked_area ? document.getElementById("adrr_" + k.properties.code) : null,
+                clicked_ap = this.clicked_area ? document.getElementById(k.properties.code) : null;
               // 지도 path 클릭 효과
               adrr.classList.toggle("selected")
               ap.classList.toggle("selected");
@@ -690,12 +657,12 @@
               clicked_adrr = adrr;
               clicked_ap = ap;
 
-              that.changeInfoBoxInBarChart(sdVal.codeToSD[d.properties.sigungu_cd.substr(0,2)], d.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
-              that.changeLocationInfoBoxInMap("locationInfoBox1", d.properties.sigungu_cd, d.properties.name, t, r)
-              that.changeLocationInfoBoxInMap("locationInfoBox2", d.properties.sigungu_cd, d.properties.name, t, r)
+              that.changeInfoBoxInBarChart(sdVal.codeToSD[d.properties.code.substr(0,2)], d.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
+              that.changeLocationInfoBoxInMap("locationInfoBox1", d.properties.code, d.properties.name, t, r)
+              that.changeLocationInfoBoxInMap("locationInfoBox2", d.properties.code, d.properties.name, t, r)
             })
             .attr("d", that.path)
-            .attr("id", function(d) { return "adrr_" + d.properties.sigungu_cd; })
+            .attr("id", function(d) { return "adrr_" + d.properties.code; })
             
           var legend = d3.legend.color()
             .labelFormat(d3.format(r == "RR" ? ".3f" : ".0f"))
@@ -900,14 +867,9 @@
             ap = document.getElementById(d.SGG_CD);
             adrr = document.getElementById("adrr_" + d.SGG_CD);
             bar = document.getElementById("bar_"+d.SGG_CD);
-            var apd = airpol_data.filter((item) => {
-                return String(item.SGG_CD) == d.SGG_CD;
-              })[0][t]
+            var apd = airpol_data.find((item) => item.SGG_CD == d.SGG_CD)[t]
 
-            var ad_data = all_death_d3_data.filter((item) => {
-                return item.SGG_CD === d.SGG_CD;
-              // })[0];
-              })[0][t + "__" + r];
+            var ad_data = all_death_d3_data.find((item) => item.SGG_CD === d.SGG_CD)[t + "__" + r];
             that.mapMouseOverTooltip(tooltip1, ap, d.SGG_CD, d.SGG_NM, apd, t);
             that.mapMouseOverTooltip(tooltip2, adrr, d.SGG_CD, d.SGG_NM, ad_data, r);
             that.mapMouseOverDetailTooltip(bar, d, d.SGG_NM, t, r, d[t + "__" + r + "_U"], d[t + "__" + r], d[t + "__" + r + "_L"]);
@@ -949,9 +911,7 @@
             //   changeLocationSearchParams("adrr", r);
             // }
 
-            var adbc_data = adbc.filter((item) => {
-              return item.SGG_CD === d.SGG_CD;
-            })[0]
+            var adbc_data = adbc.find((item) => item.SGG_CD === d.SGG_CD)
 
             // changeInfoBoxInBarChart(d.SD_NM, d.SGG_NM, t, r, eval("all_death_" + t + "__" + r + "_U").get(d.SGG_CD), eval("all_death_" + t + "__" + r).get(d.SGG_CD), eval("all_death_" + t + "__" + r + "_L").get(d.SGG_CD));
             that.changeInfoBoxInBarChart(d.SD_NM, d.SGG_NM, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
@@ -980,6 +940,7 @@
             return "sd" + d.SD_CD + "_point"
             }
           })
+          .style({"pointer-events": "none"})
 
         // y축 중앙 그리드 라인
         if(r == "RR") {
@@ -1023,11 +984,17 @@
         // 바그래프 정보 박스 업데이트
 
         var adbc = all_death_bar_chart_data;
-        var k = this.geoJsonData.features.filter(function(g){
-            return String(g.properties.sigungu_cd) === String(that.get_sgg);
-          })[0]
+        
+        // var k = this.geoJsonData.features.find((g) => g.properties.code === String(that.get_sgg))
+
+
+        var features = topojson.feature(this.geoJsonData, this.geoJsonData.objects["municipalities-geo"]).features;
+        var k = features.find((g) => g.properties.code === String(that.get_sgg))
+
+
+
         // var adbc_data = adbc.filter((item) => {
-        //     return String(item.SGG_CD) === String(k.properties.sigungu_cd);
+        //     return String(item.SGG_CD) === String(k.properties.code);
         //   })[0]
         
 
@@ -1035,10 +1002,11 @@
         // that.changeInfoBoxInBarChart(d.SD_NM, d.SGG_NM, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
         
         if(k) {
-
-          var adbc_data = adbc.filter((item) => {
-              return String(item.SGG_CD) === String(k.properties.sigungu_cd);
-            })[0]
+          
+          console.log("k : ", k)
+          var adbc_data = adbc.find((item) => item.SGG_CD === k.properties.code)
+          
+          console.log("adbc : ", adbc)
           // this.changeInfoBoxInBarChart(sdVal.codeToSD[this.get_sd.substring(0,2)], k.properties.name, t, r, eval("all_death_" + t + "__" + r + "_U").get(this.get_sgg), eval("all_death_" + t + "__" + r).get(this.get_sgg), eval("all_death_" + t + "__" + r + "_L").get(this.get_sgg));
           this.changeInfoBoxInBarChart(sdVal.codeToSD[this.get_sd.substring(0,2)], k.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
         }
@@ -1055,7 +1023,8 @@
           tooltip.style.top =  (sideLocation.bottom + (sideLocation.top - sideLocation.bottom)/2 + window.scrollY) + "px"
           tooltip.style.left = (sideLocation.left + (sideLocation.right - sideLocation.left)/2) + "px"
           tooltip.style.pointerEvents = "none";
-          tooltip.innerHTML = sgg_nm + " : " + parseFloat(value).toFixed(topic == "RR" ? 3 : 0) + " " + mapFunc.addUnitToAirPol[topic]
+          console.log("topic : ", topic)
+          tooltip.innerHTML = sgg_nm + " : " + parseFloat(value).toFixed(topic == "RR" ? 3 : 0) + " " + (mapFunc.addUnitToAirPol[topic] || "")
         }
       },  
       mapMouseOverDetailTooltip(map_hover, d, name, topic, adrr, u, center, l) {
