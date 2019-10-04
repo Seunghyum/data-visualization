@@ -682,10 +682,10 @@
 
         var adbc = all_death_bar_chart_data;
         var barChart_width = this.$refs.barChart.clientWidth;
-        var width = barChart_width > 1200 ? barChart_width : 1200;
+        var width = barChart_width > 1000 ? barChart_width : 1000;
         
         var height = width/3;
-        var margin = {top: 20, right: 20, bottom: 40, left: 80};
+        var margin = {top: 20, right: 20, bottom: 40, left: 60};
         var svg_width = width - margin.right - margin.left;
         var svg_height = height - margin.bottom - margin.top;
 
@@ -727,7 +727,7 @@
         var yAxis = d3.svg.axis()
           .scale(y)
           .orient("left")
-          .tickFormat(d3.format(r == "RR" ? ".2f" : ".1f"));
+          .tickFormat(d3.format(r == "RR" ? ".2f" : ".0f"));
         
         // var detailBox = {height: 80};
         var detailBoxHeight = 80,
@@ -743,7 +743,7 @@
         // 바 그래프 상세정보
         var detail_svg = svg.append("g")
           .attr("id", "barChartDetailBox")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .attr("transform", "translate(" + (margin.left + svg_width/2 - 50) + "," + margin.top + ")");
 
         // 바 그래프
         var chart_svg = svg.append("g")
@@ -923,8 +923,8 @@
           .style('opacity','1')
           .call(yAxis)
         yAxis.append("text")
-          .attr("x", mapFunc.adrrTranslate[r].length)
-          .attr("dy", "-1em")
+          .attr("x", mapFunc.adrrTranslate[r].length *2)
+          .attr("y", "-1em")
           .style("text-anchor", "end")
           .style('font-weight','bold')
           .text(mapFunc.adrrTranslate[r]);
@@ -998,9 +998,9 @@
           "지역 : " + name + "</br>" + 
           "미세먼지 변수 : " + topic + "</br>" + 
           mapFunc.adrrTranslate[adrr] + " : </br>" + 
-          "U : " + u +"</br>" +
-          "center : " + center + "</br>" +
-          "L : " + l;
+          "&nbsp;&nbsp; U : " + u +"</br>" +
+          "&nbsp;&nbsp; center : " + center + "</br>" +
+          "&nbsp;&nbsp; L : " + l;
           
         }
       },
@@ -1021,14 +1021,17 @@
           .style("font-size", font_size + "px")
           .text(SD_NM + " " + SGG_NM)
         detail_svg.append("text")
+          .attr("x", 10)
           .attr("y", (font_margin + font_size))
           .style("font-size", font_size + "px")
           .text("U : " + output_U)
         detail_svg.append("text")
+          .attr("x", 10)
           .attr("y", (font_margin + font_size)*2)
           .style("font-size", font_size + "px")
           .text("center : " + output_center)
         detail_svg.append("text")
+          .attr("x", 10)
           .attr("y", (font_margin + font_size)*3)
           .style("font-size", font_size + "px")
           .text("L : " + output_L)
