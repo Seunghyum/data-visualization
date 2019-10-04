@@ -1,7 +1,7 @@
 <template lang="pug">
   #app
     navigation
-    .main-container
+    .main-container.pr-5.pl-5
       router-view
 </template>
 <script lang="ts">
