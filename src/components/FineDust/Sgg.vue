@@ -1,65 +1,71 @@
 <template lang="pug">
-  div.pt-5.pb-5.pr-5.pl-5.mt-4
-    .mobile-toggle-wrapper
-      .form-location-wrapper
-        .row
-          .col-sm-2
-          .col-sm-8.without_side_pd
-            form.text-center
-              b-form-select#location.custom-select(v-model="locaOptionsSelected", 
-                                @input="locationChange(locaOptionsSelected)",
-                                :options="locaOptions")
+  div
+    #clickTooltip1
+    #clickTooltip2
+    #tooltip1
+    #tooltip2
+    #tooltip3
+    div.pt-5.pb-5.pr-5.pl-5.mt-4
+      .mobile-toggle-wrapper
+        .form-location-wrapper
+          .row
+            .col-sm-2
+            .col-sm-8.without_side_pd
+              form.text-center
+                b-form-select#location.custom-select(v-model="locaOptionsSelected", 
+                                  @input="locationChange(locaOptionsSelected)",
+                                  :options="locaOptions")
 
-      .form-wrapper.toggleDown
+        .form-wrapper.toggleDown
+          .row
+            .col-sm-2.form-border-bottom
+            .col-sm-8.without_side_pd
+              #airPolTab
+                form
+                  b-form-radio-group(id="radios2" name="airf")
+                    ul.nav.nav-tabs.justify-content-center
+                      li.nav-item.col-4.without_side_pd.text-center
+                        a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM2_5'}", @click.prevent="airPolActiveLink('PM2_5')")
+                          | PM&nbsp;
+                          sub.underText 2.5
+                      li.nav-item.col-4.without_side_pd.text-center
+                        a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM10'}", @click.prevent="airPolActiveLink('PM10')")
+                          | PM&nbsp;
+                          sub.underText 10
+                      li.nav-item.col-4.without_side_pd.text-center
+                        a.nav-link.airPolTab(:class="{ active: airpol_params == 'NO2'}", @click.prevent="airPolActiveLink('NO2')")
+                          | NO&nbsp;
+                          sub.underText 2
+            .col-sm-2.form-border-bottom
         .row
-          .col-sm-2.form-border-bottom
-          .col-sm-8.without_side_pd
-            #airPolTab
-              form
-                b-form-radio-group(id="radios2" name="airf")
-                  ul.nav.nav-tabs.justify-content-center
-                    li.nav-item.col-4.without_side_pd.text-center
-                      a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM2_5'}", @click.prevent="airPolActiveLink('PM2_5')")
-                        | PM&nbsp;
-                        sub.underText 2.5
-                    li.nav-item.col-4.without_side_pd.text-center
-                      a.nav-link.airPolTab(:class="{ active: airpol_params == 'PM10'}", @click.prevent="airPolActiveLink('PM10')")
-                        | PM&nbsp;
-                        sub.underText 10
-                    li.nav-item.col-4.without_side_pd.text-center
-                      a.nav-link.airPolTab(:class="{ active: airpol_params == 'NO2'}", @click.prevent="airPolActiveLink('NO2')")
-                        | NO&nbsp;
-                        sub.underText 2
-          .col-sm-2.form-border-bottom
-      .row
-        .col-12.subform
-          #addrForm
-            form.text-center
-              b-form-group.mg-btm-0
-                b-form-radio-group(v-model="adrr_params"
-                          @input="adrrChanged(adrr_params)"
-                          :options="adrrOptions"
-                          name="addr")
-            
-      br
-    
-    .row
-      .col-md-6.without_side_pd
-        .upperline
-        h4.subtitle 대기오염물질
-        div(ref="airMap", id="airMap")
-        
+          .col-12.subform
+            #addrForm
+              form.text-center
+                b-form-group.mg-btm-0
+                  b-form-radio-group(v-model="adrr_params"
+                            @input="adrrChanged(adrr_params)"
+                            :options="adrrOptions"
+                            name="addr")
+              
         br
-      .col-md-6.without_side_pd
-        .upperline
-        h4.subtitle 전체 사망 위험
-        div(ref="adrrMap", id="adrrMap")
-    .row
-      .col-md-12.without_side_pd
-        .upperline
-        h4.subtitle#barGraphTitle 지역별 상대 위험도 or 지역별 초과 사망자수
-        div(ref="barChart", id="barChart")
-    .bottomForMobileView
+      
+      .row
+        .col-md-6.without_side_pd
+          .upperline
+          h4.subtitle 대기오염물질
+          div(ref="airMap", id="airMap")
+          
+          br
+        .col-md-6.without_side_pd
+          .upperline
+          h4.subtitle 전체 사망 위험
+          div(ref="adrrMap", id="adrrMap")
+      .row
+        .col-md-12.without_side_pd
+          .upperline
+          h4.subtitle#barGraphTitle 지역별 상대 위험도 or 지역별 초과 사망자수
+          div(ref="barChart", id="barChart")
+      .bottomForMobileView
 </template>
 
 <script>
@@ -153,25 +159,22 @@
       this.width = this.$refs.airMap.clientWidth;
       this.height = this.width;
 
-      this.clickTooltip1 = d3.select('body').append('div')
-        .attr('class', 'hidden tooltip')
-        .attr("id", "clickTooltip1");
+      
+      this.clickTooltip1 = d3.select('#clickTooltip1')
+        .attr('class', 'hidden fd-tooltip');
 
-      this.clickTooltip2 = d3.select('body').append('div')
-        .attr('class', 'hidden tooltip')
-        .attr("id", "clickTooltip2");
+      this.clickTooltip2 = d3.select('#clickTooltip2')
+        .attr('class', 'hidden fd-tooltip');
 
-      d3.select('body').append('div')
-        .attr('class', 'hidden tooltip')
-        .attr('id', "tooltip1");
+      d3.select('#tooltip1')
+        .attr('class', 'hidden fd-tooltip');
 
-      d3.select('body').append('div')  
-        .attr('class', 'hidden tooltip')
-        .attr("id", "tooltip2");
+      d3.select('#tooltip2')  
+        .attr('class', 'hidden fd-tooltip');
 
-      d3.select('body').append('div')
-        .attr('class', 'hidden tooltip')
-        .attr("id", "tooltip3");
+      d3.select('#tooltip3')
+        .attr('class', 'hidden fd-tooltip');
+
       this.axios.get('/sgg_map', {params: {sd_cd: mapFunc.getSearchQueryParam("sd")}})
         .then(res => {
           console.log("------res.data.result : ", res.data.result)
@@ -328,9 +331,9 @@
       changeHoverToolTip(d, tl, sideLocation, t, r) {
         var tooltip1 = d3.select("#tooltip1");
           tooltip1.text("")
-          tooltip1.attr("class", "tooltip hover")
+          tooltip1.attr("class", "fd-tooltip hover")
             .style("top", (tl.top + window.scrollY) + "px")
-            .style("left", tl.right + 5 + "px")
+            .style("left", (tl.right-100) + "px")
           tooltip1
             .append("span")
             .text("시도 : " +  sdVal.codeToSD[d.properties.sigungu_cd.substr(0,2)])
@@ -346,7 +349,7 @@
 
         var tooltip2 = d3.select("#tooltip2");
           tooltip2.text("")
-          tooltip2.attr("class", "tooltip hover")
+          tooltip2.attr("class", "fd-tooltip hover")
             .style("top", (sideLocation.top + window.scrollY) + "px")
             .style("left", sideLocation.right + 5 + "px")
             .style("z-index", 999)
