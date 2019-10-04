@@ -53,18 +53,18 @@
         .col-md-6.without_side_pd
           .upperline
           h4.subtitle 대기오염물질
-          div(ref="airMap", id="airMap")
+          #airMap(ref="airMap")
           
           br
         .col-md-6.without_side_pd
           .upperline
           h4.subtitle 전체 사망 위험
-          div(ref="adrrMap", id="adrrMap")
+          #adrrMap(ref="adrrMap")
       .row
         .col-md-12.without_side_pd
           .upperline
           h4.subtitle#barGraphTitle 지역별 상대 위험도 or 지역별 초과 사망자수
-          div(ref="barChart", id="barChart")
+          #barChart(ref="barChart")
       .bottomForMobileView
 </template>
 
@@ -682,10 +682,10 @@
 
         var adbc = all_death_bar_chart_data;
         var barChart_width = this.$refs.barChart.clientWidth;
-        var width = barChart_width > 770 ? barChart_width : 1000;
+        var width = barChart_width > 1200 ? barChart_width : 1200;
         
         var height = width/3;
-        var margin = {top: 20, right: 20, bottom: 30, left: 65};
+        var margin = {top: 20, right: 20, bottom: 40, left: 80};
         var svg_width = width - margin.right - margin.left;
         var svg_height = height - margin.bottom - margin.top;
 
@@ -745,7 +745,7 @@
           .attr("id", "barChartDetailBox")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-          // 바 그래프
+        // 바 그래프
         var chart_svg = svg.append("g")
           .attr("transform", "translate(" + margin.left + "," + (margin.top*2 + detailBoxHeight) + ")");
 
@@ -782,22 +782,26 @@
           .call(xAxis)
         .selectAll("g")
           .attr("transform", function(d){
-          var index = sds.indexOf(d);
+            var index = sds.indexOf(d);
 
-          if(sds[index-1]) {
-            var result = z3(sds.lastIndexOf(sds[index-1]))/2 + z3(sds.lastIndexOf(d))/2;
-            return "translate(" + result + ",0)";
-          } else {
-            return "translate(" + z3(sds.lastIndexOf(d))/2 + ",0)";
-          }
+            if(sds[index-1]) {
+              var result = z3(sds.lastIndexOf(sds[index-1]))/2 + z3(sds.lastIndexOf(d))/2;
+              return "translate(" + result + ",0)";
+            } else {
+              return "translate(" + z3(sds.lastIndexOf(d))/2 + ",0)";
+            }
           })
         .select("text")
           .text(function(t){
-            if(["경상북도", "경상남도","충청북도", "충청남도", "전라남도","전라북도"].includes(t)){
-              return t
-            } else {
-              return t.substring(0,2);
-            }
+            // if(["경상북도", "경상남도","충청북도", "충청남도", "전라남도","전라북도", "경기도"].includes(t)){
+            //   return t
+            // } else {
+            //   return t.substring(0,2);
+            // }
+            return sdVal.shortSdName[t]
+          })
+          .attr("transform",function(t) { 
+            return "translate(13,20) rotate(90)"; 
           })
 
         // text label for the x axis
@@ -824,33 +828,24 @@
           tooltip2 = document.getElementById("tooltip2"),
           tooltip3 = document.getElementById("tooltip3"),
           that = this;
-        // slice.selectAll("rect")
+          
         slice.select("rect")
           .data(adbc)
-          // .data(function(d) { 
-          //   console.log("d : ", d)
-          //   return d; 
-          // })
           .enter().append("rect")
           .attr("width", x1.rangeBand())
           .attr("x", function(d) { 
             return x1(d.SGG_CD); 
           })
-          // .style("fill", "rgb(254,230,206)")
           .style("stroke", "black")
           .style("stroke-width", .2)
           .attr("y", function(d) { 
-            // return y(eval("d." + t + "__" + r + "_U"))
             return y(d[t + "__" + r + "_U"]);
           })
           .attr("height", function(d) { 
-            // return (y(eval("d." + t + "__" + r + "_L")) - y(eval("d." + t + "__" + r + "_U")))
             return (y(d[t + "__" + r + "_L"]) - y(d[t + "__" + r + "_U"]))
           })
           .attr("class", function(d){
-            // console.log("that.get_sgg : ", that.get_sgg)
             if (l == d.SD_CD) {
-              // if (d.SGG_CD == String(that.urlSGGValue)) {
               if (d.SGG_CD == String(that.get_sgg)) {
                 return "sd" + d.SD_CD + " highlight" + " selected"
               } else {
@@ -880,40 +875,7 @@
             that.tooltipMouseOut(bar, tooltip3);
           })
           .on("click", function(d){
-            // var content = $('#content');
-            // content.children().eq(0).html(d.SD_NM);
-            // content.children().eq(1).html(d.SGG_NM);
-            // content.children().eq(2).html(d.PM2_5__RR);
-            // content.children().eq(3).html(d.PM2_5__ad);
-            // content.children().eq(4).html(d.PM10__RR);
-            // content.children().eq(5).html(d.PM10__ad);
-            // content.children().eq(6).html(d.NO2__RR);
-            // content.children().eq(7).html(d.NO2__ad);
-              
-            // $('#dataModal').modal('show')
-            
-            // if(adrr && adrr.classList.contains("selected") && ap && ap.classList.contains("selected")) {
-            //   changeLocationSearchParams("sd", "none");
-            //   changeLocationSearchParams("sgg", "none");
-            //   changeLocationSearchParams("airpol", t);
-            //   changeLocationSearchParams("adrr", r);
-
-            //   adrr.classList.toggle("selected")
-            //   ap.classList.toggle("selected");
-            //   if (clicked_adrr && clicked_adrr != adrr){
-            //   clicked_adrr.classList.remove("selected");
-            //   clicked_ap.classList.remove("selected");
-            //   }
-            // } else {
-            //   changeLocationSearchParams("sd", d.SD_CD);
-            //   changeLocationSearchParams("sgg", d.SGG_CD);
-            //   changeLocationSearchParams("airpol", t);
-            //   changeLocationSearchParams("adrr", r);
-            // }
-
             var adbc_data = adbc.find((item) => item.SGG_CD === d.SGG_CD)
-
-            // changeInfoBoxInBarChart(d.SD_NM, d.SGG_NM, t, r, eval("all_death_" + t + "__" + r + "_U").get(d.SGG_CD), eval("all_death_" + t + "__" + r).get(d.SGG_CD), eval("all_death_" + t + "__" + r + "_L").get(d.SGG_CD));
             that.changeInfoBoxInBarChart(d.SD_NM, d.SGG_NM, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
             that.changeLocationInfoBoxInMap("locationInfoBox1", d.SGG_CD, d.SGG_NM, t, r)
             that.changeLocationInfoBoxInMap("locationInfoBox2", d.SGG_CD, d.SGG_NM, t, r)
@@ -961,8 +923,8 @@
           .style('opacity','1')
           .call(yAxis)
         yAxis.append("text")
-          .attr("x", -6)
-          .attr("dy", "-0.5em")
+          .attr("x", mapFunc.adrrTranslate[r].length)
+          .attr("dy", "-1em")
           .style("text-anchor", "end")
           .style('font-weight','bold')
           .text(mapFunc.adrrTranslate[r]);
@@ -1002,11 +964,7 @@
         // that.changeInfoBoxInBarChart(d.SD_NM, d.SGG_NM, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
         
         if(k) {
-          
-          console.log("k : ", k)
           var adbc_data = adbc.find((item) => item.SGG_CD === k.properties.code)
-          
-          console.log("adbc : ", adbc)
           // this.changeInfoBoxInBarChart(sdVal.codeToSD[this.get_sd.substring(0,2)], k.properties.name, t, r, eval("all_death_" + t + "__" + r + "_U").get(this.get_sgg), eval("all_death_" + t + "__" + r).get(this.get_sgg), eval("all_death_" + t + "__" + r + "_L").get(this.get_sgg));
           this.changeInfoBoxInBarChart(sdVal.codeToSD[this.get_sd.substring(0,2)], k.properties.name, t, r, adbc_data[t + "__" + r + "_U"], adbc_data[t + "__" + r], adbc_data[t + "__" + r + "_L"]);
         }
@@ -1023,7 +981,6 @@
           tooltip.style.top =  (sideLocation.bottom + (sideLocation.top - sideLocation.bottom)/2 + window.scrollY) + "px"
           tooltip.style.left = (sideLocation.left + (sideLocation.right - sideLocation.left)/2) + "px"
           tooltip.style.pointerEvents = "none";
-          console.log("topic : ", topic)
           tooltip.innerHTML = sgg_nm + " : " + parseFloat(value).toFixed(topic == "RR" ? 3 : 0) + " " + (mapFunc.addUnitToAirPol[topic] || "")
         }
       },  
