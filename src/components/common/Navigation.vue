@@ -2,13 +2,15 @@
   .nav-container.nav-container--sidebar
     .nav-sidebar-column
       .text-center.text-block
-        a(href='index.html')
+        h2 
+          b Data Lab
+        router-link(to='/')
           img(alt='logo' src="@/assets/images/profile_image.png")
       hr
       .text-block
         ul.menu-vertical
-          //- li
-            router-link.js-scroll-trigger(to='/') 홈
+          li
+            a.js-scroll-trigger(href='https://seunghyum.github.io' target="_blank") 블로그
           li
             router-link.js-scroll-trigger(to='/finedust') 미세먼지
           //- li.dropdown
@@ -40,18 +42,6 @@
               i.socicon.socicon-linkedin.icon.icon--xs
     .nav-sidebar-column-toggle.visible-xs.visible-sm(data-toggle-class='.nav-sidebar-column;active')
       i.stack-menu
-
-  //- div
-    a.menu-toggle.rounded(href='#' @click.prevent="isActive=!isActive" :class="{ active: isActive }")
-      i.fas.fa-bars(v-if="!isActive")
-      i.fas.fa-times(v-else)
-    nav#sidebar-wrapper(:class="{ active: isActive }")
-      ul.sidebar-nav
-        li.sidebar-brand(@click="isActive=false")
-          router-link.js-scroll-trigger(to='/') 홈
-        li.sidebar-nav-item(@click="isActive=false")
-          router-link.js-scroll-trigger(to='/finedust') 미세먼지
-
 </template>
 
 <script lang="ts">
