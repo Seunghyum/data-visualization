@@ -16,23 +16,25 @@
         router-view
       .pb-5
 </template>
-<style lang="scss">
+<style lang="scss" scope>
   @import '@/assets/styles/fine-dust.scss';
-  #bg-finedust {
-    background: url("../assets/images/korea_fine_dust_city.jpg") no-repeat center center fixed;
-    min-height: 100vh;
-  }
-  .finedust-page-wrapper {
-    background: rgba(0,0,0,0.3);
-  }
+  // #bg-finedust {
+  //   // background: url("../assets/images/korea_fine_dust_city.jpg") no-repeat center center fixed;
+  //   // background-color: #A49FA3;
+  //   // min-height: 100vh;
+  // }
+  // .finedust-page-wrapper {
+  //   background: rgba(0,0,0,0.3);
+  // }
 </style>
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
   data() {
     return {
       isSdActive: false,
-      isSggActive: false
+      isSggActive: false,
     }
   },
 })

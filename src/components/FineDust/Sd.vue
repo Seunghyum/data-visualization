@@ -764,7 +764,6 @@
             .attr("id", "legendQuant2")
           that.initLegendBox(legend, legendQuant2, svg2, "locationInfoBox2")
         
-        
       }
       }
     }

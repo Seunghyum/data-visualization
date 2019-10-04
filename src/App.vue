@@ -1,8 +1,8 @@
-<template>
-  <div id="app">
-    <navigation/>
-    <router-view/>
-  </div>
+<template lang="pug">
+  #app
+    navigation
+    .main-container
+      router-view
 </template>
 <script lang="ts">
 import Vue from 'vue'

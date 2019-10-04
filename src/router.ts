@@ -16,7 +16,8 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      // component: Home,
+      component: FineDust,
     },
     {
       path: '/finedust',
