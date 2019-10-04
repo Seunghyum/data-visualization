@@ -32,13 +32,13 @@
       div
         ul.social-list.list-inline.list--hover
           li
-            a(href='#')
-              i.socicon.socicon-google.icon.icon--xs
+            a(href='mailto:antmgu@gmail.com')
+              i.socicon.socicon-mail.icon.icon--xs
           li
-            a(href='#')
+            a(href='https://github.com/Seunghyum' target="_blank")
               i.socicon.socicon-github.icon.icon--xs
           li
-            a(href='#')
+            a(href='https://www.linkedin.com/in/dave-11096614b' target="_blank")
               i.socicon.socicon-linkedin.icon.icon--xs
     .nav-sidebar-column-toggle.visible-xs.visible-sm(data-toggle-class='.nav-sidebar-column;active')
       i.stack-menu
