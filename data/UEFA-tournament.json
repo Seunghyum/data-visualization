@@ -1,0 +1,412 @@
+{
+  "match": [
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 1
+      },
+      "seed": [
+        1,
+        8
+      ],
+      "number": 1,
+      "participant": [
+        {
+          "_id": "Barcelona",
+          "name": "Barcelona"
+        },
+        {
+          "_id": "Lyon",
+          "name": "Lyon"
+        }
+      ],
+      "score": [
+        5,
+        1
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 2
+      },
+      "seed": [
+        3,
+        6
+      ],
+      "number": 3,
+      "participant": [
+        {
+          "_id": "Paris",
+          "name": "Paris"
+        },
+        {
+          "_id": "Man. United",
+          "name": "Man. United"
+        }
+      ],
+
+      "score": [
+        3,
+        3.1
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 5
+      },
+      "seed": [
+        3,
+        6
+      ],
+      "number": 3,
+      "participant": [
+        {
+          "_id": "Bayern",
+          "name": "Bayern"
+        },
+        {
+          "_id": "Liverpool",
+          "name": "Liverpool"
+        }
+      ],
+
+      "score": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 7
+      },
+      "seed": [
+        3,
+        6
+      ],
+      "number": 3,
+      "participant": [
+        {
+          "_id": "Porto",
+          "name": "Porto"
+        },
+        {
+          "_id": "Roma",
+          "name": "Roma"
+        }
+      ],
+
+      "score": [
+        4,
+        3
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 3
+      },
+      "seed": [
+        5,
+        4
+      ],
+      "number": 2,
+      "participant": [
+        {
+          "_id": "Juventus",
+          "name": "Juventus"
+        },
+        {
+          "_id": "Atlético",
+          "name": "Atlético"
+        }
+      ],
+      "score": [
+        3,
+        2
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 8
+      },
+      "seed": [
+        3,
+        6
+      ],
+      "number": 3,
+      "participant": [
+        {
+          "_id": "Real Madrid",
+          "name": "Real Madrid"
+        },
+        {
+          "_id": "Ajax",
+          "name": "Ajax"
+        }
+      ],
+
+      "score": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 4
+      },
+      "seed": [
+        3,
+        6
+      ],
+      "number": 3,
+      "participant": [
+        {
+          "_id": "Dortmund",
+          "name": "Dortmund"
+        },
+        {
+          "_id": "Tottenham",
+          "name": "Tottenham"
+        }
+      ],
+
+      "score": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 1,
+        "m": 6
+      },
+      "seed": [
+        3,
+        6
+      ],
+      "number": 3,
+      "participant": [
+        {
+          "_id": "Man City",
+          "name": "Man City"
+        },
+        {
+          "_id": "Schalke",
+          "name": "Schalke"
+        }
+      ],
+
+      "score": [
+        10,
+        2
+      ]
+    },
+
+
+
+
+
+
+
+
+    {
+      "id": {
+        "s": 1,
+        "r": 2,
+        "m": 1
+      },
+      "seed": [
+        7,
+        2
+      ],
+      "number": 4,
+      "participant": [
+        {
+          "_id": "Barcelona",
+          "name": "Barcelona"
+        },
+        {
+          "_id": "Man. United",
+          "name": "Man. United"
+        }
+      ],
+      "score": [
+        4,
+        0
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 2,
+        "m": 1
+      },
+      "seed": [
+        7,
+        2
+      ],
+      "number": 4,
+      "participant": [
+        {
+          "_id": "Liverpool",
+          "name": "Liverpool"
+        },
+        {
+          "_id": "Porto",
+          "name": "Porto"
+        }
+      ],
+      "score": [
+        6,
+        1
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 2,
+        "m": 1
+      },
+      "seed": [
+        7,
+        2
+      ],
+      "number": 4,
+      "participant": [
+        {
+          "_id": "Juventus",
+          "name": "Juventus"
+        },
+        {
+          "_id": "Ajax",
+          "name": "Ajax"
+        }
+      ],
+      "score": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 2,
+        "m": 1
+      },
+      "seed": [
+        7,
+        2
+      ],
+      "number": 4,
+      "participant": [
+        {
+          "_id": "Tottenham",
+          "name": "Tottenham"
+        },
+        {
+          "_id": "Man City",
+          "name": "Man City"
+        }
+      ],
+      "score": [
+        4.1,
+        4
+      ]
+    },
+
+
+    {
+      "id": {
+        "s": 1,
+        "r": 3,
+        "m": 1
+      },
+      "seed": [
+        7,
+        2
+      ],
+      "number": 4,
+      "participant": [
+        {
+          "_id": "Barcelona",
+          "name": "Barcelona"
+        },
+        {
+          "_id": "Liverpool",
+          "name": "Liverpool"
+        }
+      ],
+      "score": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": {
+        "s": 1,
+        "r": 3,
+        "m": 2
+      },
+      "seed": [
+        7,
+        2
+      ],
+      "number": 4,
+      "participant": [
+        {
+          "_id": "Tottenham",
+          "name": "Tottenham"
+        },
+        {
+          "_id": "Ajax",
+          "name": "Ajax"
+        }
+      ],
+      "score": [
+        3,
+        2
+      ]
+    },
+
+
+    {
+      "id": {
+        "s": 1,
+        "r": 4,
+        "m": 1
+      },
+      "seed": [
+        7,
+        2
+      ],
+      "number": 4,
+      "participant": [
+        {
+          "_id": "Liverpool",
+          "name": "Liverpool"
+        },
+        {
+          "_id": "Tottenham",
+          "name": "Tottenham"
+        }
+      ],
+      "score": [
+        2,
+        0
+      ]
+    }
+  ]
+}

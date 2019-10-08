@@ -1,11 +1,49 @@
 <template lang='pug'>
-  .tounament-wrapper
-    svg#root
+  div
+    .banner
+      .img-gradient
+        .banner-trophy
+    .intro.pl-5.pr-5
+      p
+        | Design Reference : 
+        a(href="https://www.uefa.com/uefachampionsleague/" target="_blank") UEFA Home page
+        <br>
+        | Visaulization Tool : D3.js
+    .tounament-wrapper
+      svg#root
 
 </template>
 <style lang='scss' scoped>
+  .img-gradient {
+    height: 200px;
+    width: 100%;
+    background-image: linear-gradient(to top,#00004b,60%,rgba(0,0,0,0));
+  }
+  .banner {
+    background-image: url("../assets/images/UEFA/banner.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 200px;
+  }
+  .banner-trophy {
+    overflow: auto;
+    background-image: url("../assets/images/UEFA/logo_small.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 70% 70%;
+    height: 200px;
+    width: 100%;
+  }
+  .intro {
+    background-color: #00004b;
+    color: white;
+  }
   .tounament-wrapper {
-    background-color: #17181A;
+    background-image: url("../assets/images/UEFA/ucl-bg-header.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     overflow: scroll;
   }
   .fight {
@@ -24,8 +62,8 @@ export default {
       roundNames: null,
       distance: {
         svg: {
-          width: 1000,
-          height: 1000,
+          width: 1260,
+          height: 1260,
           top: 10,
           bottom: 10,
           right: 10,
@@ -87,7 +125,7 @@ export default {
       roundNumbers.forEach((e) => {
           if(e == roundNumbers.length) roundNames.push("Finals")
           else if (e == roundNumbers.length-1) roundNames.push("Semifinals")
-          else roundNames.push(`Round ${e}`)
+          else roundNames.push(`Round of ${16/Math.pow(2,e-1)}`)
       })
       this.roundNames = roundNames
       
@@ -106,19 +144,20 @@ export default {
                 .attr('y', 0)
                 .attr('width',distance.width)
                 .attr('height',distance.height)
-                .attr('fill', '#575B66')
+                .attr('fill', '#5af7dc')
       bannerItem.append('text')
                 .attr('x', distance.width/2)
                 .attr('y', distance.height/2)
                 .attr('text-anchor','middle')
                 .attr('alignment-baseline','middle')
                 .attr('font-size', distance.fontSize)
+                .attr('font-weight', "bold")
                 .text(e => e)
     },
     initTounament() {
       const self = this
       const match = this.InterviewData.match
-      const fixedMarginTop = 50
+      const fixedMarginTop = 80
       const fixedMarginLeft = 20
       let margin = {
         top: fixedMarginTop,
@@ -133,18 +172,19 @@ export default {
                                               .attr('transform', `translate(0,${tournamentMarginTop})`)
 
       const fightBox = {
-        height: 56,
+        height: 70,
         width: this.distance.round.width - 2 * fixedMarginLeft,
       }
 
       let SeedNameBox = {
         width: fightBox.width-2*fixedMarginLeft,
-        height: fightBox.height/2
+        height: fightBox.height/2,
+        margin: 5
       }
       
       const scoreBox = {
-        width: 28,
-        height: 28,
+        width: fightBox.height/2,
+        height: fightBox.height/2,
         x: numberWidth + SeedNameBox.width + margin.betweenBox
       }
 
@@ -180,15 +220,15 @@ export default {
                                 d3.select(this).attr('transform', `translate(${margin.left}, ${firstMarginHeightInEachRound + marginHeightInEachRound*(iterateInSameRound-1)})`)
                               })
       
-      fight.append('text')
-          .attr('class', 'number')
-          .text((d) => d.number)
-          .attr('x',0)
-          .attr('y', fightBox.height/2)
-          .attr('text-anchor','middle')
-          .attr('alignment-baseline','middle')
-          .attr('fill', '#8B8C8D')
-          .attr('font-size', 10)
+      // fight.append('text')
+      //     .attr('class', 'number')
+      //     .text((d) => d.number)
+      //     .attr('x',0)
+      //     .attr('y', fightBox.height/2)
+      //     .attr('text-anchor','middle')
+      //     .attr('alignment-baseline','middle')
+      //     .attr('fill', '#8B8C8D')
+      //     .attr('font-size', 10)
       
       function usernameMouseOver(e, fight, target, self) {
         const userId = d3.select(target).attr('data-user-id')
@@ -238,18 +278,23 @@ export default {
                   .attr('height', SeedNameBox.height)
                   .attr('fill', '#2E2F33')
                   .style('cursor', 'pointer')
-                  
-      upSeedNameBox.append('text')
+      // upSeedNameBox.append('text')
+      //             .attr('x', 10)
+      //             .attr('y', SeedNameBox.height/2)
+      //             .attr('font-size', 12)
+      //             .attr('fill', '#304380')
+      //             .attr('text-anchor','start')
+      //             .attr('alignment-baseline','middle')
+      //             .text((d) => d.seed[0])
+      upSeedNameBox.append('image')
                   .attr('x', 10)
-                  .attr('y', SeedNameBox.height/2)
-                  .attr('font-size', 12)
-                  .attr('fill', '#304380')
-                  .attr('text-anchor','start')
-                  .attr('alignment-baseline','middle')
-                  .text((d) => d.seed[0])
+                  .attr('y', SeedNameBox.margin/2)
+                  .attr('width', SeedNameBox.height - SeedNameBox.margin)
+                  .attr('height', SeedNameBox.height - SeedNameBox.margin)
+                  .attr('xlink:href', (d) => require(`@/assets/images/UEFA/${d.participant[0].name}.png`))
       upSeedNameBox.append('text')
                   .attr('class', 'username')
-                  .attr('x', 25)
+                  .attr('x', 10 + SeedNameBox.height)
                   .attr('y', SeedNameBox.height/2)
                   .attr('font-size', 12)
                   .attr('fill', 'white')
@@ -276,7 +321,7 @@ export default {
             .attr('y', scoreBox.height/2 + 1)
             .attr('font-size', 12)
             .attr('fill', 'white')
-            .text((d) => d.score[0])
+            .text((d) => Math.floor(d.score[0]))
 
       // down box 설정
       const downBox = fight.append('g')
@@ -296,17 +341,23 @@ export default {
                     .attr('height', SeedNameBox.height)
                     .attr('fill', '#2E2F33')
                     .style('cursor', 'pointer')
-      downSeedNameBox.append('text')
-                    .attr('x', 10)
-                    .attr('y', SeedNameBox.height/2 + margin.betweenBox)
-                    .attr('font-size', 12)
-                    .attr('fill', '#304380')
-                    .attr('text-anchor','start')
-                    .attr('alignment-baseline','middle')
-                    .text((d) => d.seed[1])
+      // downSeedNameBox.append('text')
+      //               .attr('x', 10)
+      //               .attr('y', SeedNameBox.height/2 + margin.betweenBox)
+      //               .attr('font-size', 12)
+      //               .attr('fill', '#304380')
+      //               .attr('text-anchor','start')
+      //               .attr('alignment-baseline','middle')
+      //               .text((d) => d.seed[1])
+      downSeedNameBox.append('image')
+                  .attr('x', 10)
+                  .attr('y', SeedNameBox.margin/2)
+                  .attr('width', SeedNameBox.height - SeedNameBox.margin)
+                  .attr('height', SeedNameBox.height - SeedNameBox.margin)
+                  .attr('xlink:href', (d) => require(`@/assets/images/UEFA/${d.participant[1].name}.png`))
       downSeedNameBox.append('text')
                     .attr('class', 'username')
-                    .attr('x', 25)
+                    .attr('x', 10 + SeedNameBox.height)
                     .attr('y', SeedNameBox.height/2 + margin.betweenBox)
                     .attr('font-size', 12)
                     .attr('fill', 'white')
@@ -334,7 +385,7 @@ export default {
               .attr('y', scoreBox.height*1.5 + margin.betweenBox + 1)
               .attr('font-size', 12)
               .attr('fill', 'white')
-              .text((d) => d.score[1])
+              .text((d) => Math.floor(d.score[1]))
 
       // 다음 라운드를 이어주는 Path생성
       fight.append('g')
@@ -342,33 +393,30 @@ export default {
           .attr('transform', `translate(${scoreBox.x},0)`)
         .append('path')
           .attr('fill', "transparent")
-          .attr('stroke', "#304380")
+          .attr('stroke', "#5af7dc")
           .attr('stroke-width',pathStrokeWidth)
           .attr('d', function (d,i) {
             if(self.roundNames.length === d.id.r) {
-              console.log("d3.select(this) : ", d3.select(this.parentNode))
-              const iconTrophy = require('@/assets/images/icon-trophy.svg')
-              console.log('iconTrophy : ', iconTrophy)
               d3.select(this.parentNode).append('image')
                             .attr('x', scoreBox.width)
-                            .attr('y', scoreBox.height/2)
+                            .attr('y', scoreBox.height/3)
                             .attr('width', 40)
                             .attr('height', 40)
-                            .attr('xlink:href', require('@/assets/images/icon-trophy.svg'))
+                            .attr('xlink:href', require('@/assets/images/UEFA/icon-trophy.svg'))
               return
             }
             let marginHeightInEachRound = Math.pow(2, d.id.r-1) * (self.distance.round.height + fixedMarginTop) 
             let pathToDownOrUp = i%2 == 1 ? -Math.abs( + marginHeightInEachRound/2) :  + marginHeightInEachRound/2
               
             const detactedPointFromOrigin = scoreBox.height + pathStrokeWidth/2
-            const curvePointFromOrign = scoreBox.width + fixedMarginLeft/2
+            const curvePointFromOrign = scoreBox.width + fixedMarginLeft
             return (
               "M" + scoreBox.width + " " + detactedPointFromOrigin + 
               ' L' + curvePointFromOrign + " " + detactedPointFromOrigin +
               " M" + curvePointFromOrign + " " + detactedPointFromOrigin +
               ' L' + curvePointFromOrign + " " + (detactedPointFromOrigin + pathToDownOrUp) +
               " M" + curvePointFromOrign + " " + (detactedPointFromOrigin + pathToDownOrUp) +
-              ' L' + (scoreBox.width + fixedMarginLeft*1.3) + " " + (detactedPointFromOrigin + pathToDownOrUp)
+              ' L' + (scoreBox.width + fixedMarginLeft*2 + 2) + " " + (detactedPointFromOrigin + pathToDownOrUp)
             )
           })
     },

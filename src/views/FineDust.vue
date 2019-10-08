@@ -1,5 +1,5 @@
 <template lang="pug">
-  #fine-dust
+  #fine-dust.pr-5.pl-5
     .container
       .row
         .col-md-12
