@@ -6,7 +6,7 @@
     .intro.pl-5.pr-5
       p
         | Design Reference : 
-        a(href="https://www.uefa.com/uefachampionsleague/" target="_blank") UEFA Home page
+        a(href="https://www.uefa.com/uefachampionsleague/" target="_blank") UEFA Homepage
         <br>
         | Visaulization Tool : D3.js
     .tounament-wrapper
@@ -81,6 +81,7 @@ export default {
         rootSvg: null
       },
       currentHoveredUserBoxes: [],
+      currentHoveredUserPaths: []
     }
   },
   async mounted() {
@@ -236,25 +237,43 @@ export default {
         let indexes = []
         fight.data().forEach((f,i) => {
           f.participant.forEach((e, j) => {
-            if(e._id == userId) indexes.push([i,j])
+            if(e._id == userId) {
+              let oppisite = j === 0 ? 1 : 0
+              let isWin = f.score[j] > f.score[oppisite]
+              indexes.push([i,j,isWin])
+            }
           })
         })
 
         let currentHoveredUserBoxes = []
+        let currentHoveredUserPaths = []
+        
         if(indexes.length > 0 ) {
-          indexes.forEach(e => {
-            const upOrDownBox = e[1] === 0 ? '.upBox' : '.downBox'
-            const target = tournament.select(`g.fight:nth-child(${e[0]+1})`).select(upOrDownBox).select('rect').attr('fill', color.afterHover)
-              currentHoveredUserBoxes.push(target)
+          indexes.forEach(f => {
+            const upOrDownBox = f[1] === 0 ? '.upBox' : '.downBox'
+            const targetBox = tournament.select(`g.fight:nth-child(${f[0]+1}) ${upOrDownBox} rect`)
+                                        .attr('fill', color.afterHover)
+            currentHoveredUserBoxes.push(targetBox)
+            
+            if(f[2]) {
+              const targetPath = tournament.select(`g.fight:nth-child(${f[0]+1}) .pathToNextRound path`)
+                                          .attr('stroke-width', 4)
+              currentHoveredUserPaths.push(targetPath)
+            }
           })
         }
         self.currentHoveredUserBoxes = currentHoveredUserBoxes
+        self.currentHoveredUserPaths = currentHoveredUserPaths
       }
 
       function usernameMouseOut(self) {
         if(self.currentHoveredUserBoxes.length === 0) return false
         self.currentHoveredUserBoxes.forEach(e => {
           e.attr('fill', color.beforeHover)
+        })
+        
+        self.currentHoveredUserPaths.forEach(e => {
+          e.attr('stroke-width', 2)
         })
       }
       
