@@ -16,8 +16,8 @@
       .row
         .col-lg-12
           .text-center
-            router-link.btn(to='/finedust/sd' @click.prevent active-class="bg--twitter") 시도
-            router-link.btn(to='/finedust/sgg' @click.prevent active-class="bg--twitter") 시군구
+            router-link.btn.mb-0(to='/finedust/sd' @click.prevent active-class="bg--twitter") 시도
+            router-link.btn.mb-0(to='/finedust/sgg' @click.prevent active-class="bg--twitter") 시군구
       
       .finedust-page-wrapper
         router-view

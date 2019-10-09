@@ -17,7 +17,7 @@
   .img-gradient {
     height: 200px;
     width: 100%;
-    background-image: linear-gradient(to top,#00004b,60%,rgba(0,0,0,0));
+    background-image: linear-gradient(to top,#04103a,60%,rgba(0,0,0,0));
   }
   .banner {
     background-image: url("../assets/images/UEFA/banner.jpg");
@@ -36,7 +36,7 @@
     width: 100%;
   }
   .intro {
-    background-color: #00004b;
+    background-color: #04103a;
     color: white;
   }
   .tounament-wrapper {

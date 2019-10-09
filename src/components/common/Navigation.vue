@@ -1,6 +1,6 @@
 <template lang="pug">
   .nav-container.nav-container--sidebar
-    .nav-sidebar-column
+    .nav-sidebar-column(:class="{active: toggledClass}")
       .text-center.text-block
         h2 
           b Data Lab
@@ -42,7 +42,7 @@
           li
             a(href='https://www.linkedin.com/in/dave-11096614b' target="_blank")
               i.socicon.socicon-linkedin.icon.icon--xs
-    .nav-sidebar-column-toggle.visible-xs.visible-sm(data-toggle-class='.nav-sidebar-column;active')
+    .nav-sidebar-column-toggle.visible-xs.visible-sm(:class="{'toggled-class': toggledClass}" @click="toggledClass = !toggledClass")
       i.stack-menu
 </template>
 
@@ -51,9 +51,13 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
+      toggledClass: false
     }
   },
-  mounted() {
+  methods: {
+    toggleNavigation() {
+      this.toggledClass = !this.toggledClass
+    }
   }
   
 })
