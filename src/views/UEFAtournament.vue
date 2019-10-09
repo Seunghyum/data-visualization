@@ -3,7 +3,7 @@
     .banner
       .img-gradient
         .banner-trophy
-    .intro.pl-5.pr-5
+    .intro.p-5
       p
         | Design Reference : 
         a(href="https://www.uefa.com/uefachampionsleague/" target="_blank") UEFA Homepage
@@ -11,9 +11,32 @@
         | Visaulization Tool : D3.js
     .tounament-wrapper
       svg#root
-
+      #tournament-navigation.m-3
+        .tour-tool-box
+          a.tour-item.mr-2(@click="tournamentScaleUp")
+            i.far.fa-plus-square
+          a.tour-item.mr-2(@click="tournamentScaleDown")
+            i.far.fa-minus-square
+          a.tour-item(@click="tournamentScaleInit")
+            i.fas.fa-expand
 </template>
 <style lang='scss' scoped>
+  #tournament-navigation {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    .tour-tool-box {
+      padding: 10px;
+      margin: auto;
+      font-size: 35px;
+      color: #5AF7DC;
+      vertical-align: middle;
+      cursor: pointer;
+      .tour-item i:hover {
+        font-weight: 700;
+      }
+    }
+  }
   .img-gradient {
     height: 200px;
     width: 100%;
@@ -58,13 +81,13 @@ import * as d3 from 'd3';
 export default {
   data() {
     return {
+      zoom:1,
       InterviewData: null,
       roundNames: null,
       distance: {
         svg: {
           width: 1260,
           height: 1260,
-          top: 10,
           bottom: 10,
           right: 10,
           left: 10
@@ -78,7 +101,8 @@ export default {
         pathHeight: 0
       },
       uiElements: {
-        rootSvg: null
+        rootSvg: null,
+        tournament: null
       },
       currentHoveredUserBoxes: [],
       currentHoveredUserPaths: []
@@ -167,11 +191,11 @@ export default {
       }
       
       const numberWidth = 10
-      const tournamentMarginTop = this.distance.svg.top + this.distance.round.height + margin.top;
+      const tournamentMarginTop = this.distance.round.height;
       const tournament = this.uiElements.rootSvg.append('g')
                                               .attr('class','tournament')
                                               .attr('transform', `translate(0,${tournamentMarginTop})`)
-
+      
       const fightBox = {
         height: 70,
         width: this.distance.round.width - 2 * fixedMarginLeft,
@@ -439,6 +463,18 @@ export default {
             )
           })
     },
+    tournamentScaleUp() {
+      this.zoom += 0.1;
+      this.uiElements.rootSvg.attr("transform", `translate(0,0) scale(${this.zoom})`)
+    },
+    tournamentScaleDown() {
+      this.zoom -= 0.1;
+      this.uiElements.rootSvg.attr("transform", `translate(0,0) scale(${this.zoom})`)
+    },
+    tournamentScaleInit() {
+      this.zoom = 1;
+      this.uiElements.rootSvg.attr("transform", `translate(0,0) scale(${this.zoom})`)
+    }
   }
 }
 </script>
