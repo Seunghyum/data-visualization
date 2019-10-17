@@ -78,6 +78,7 @@
 </style>
 <script>
 import * as d3 from 'd3';
+const ClubsImage = require('../assets/images/UEFA/clubs.png')
 
 export default {
   data() {
@@ -404,11 +405,9 @@ export default {
                   .attr('y', SeedNameBox.margin/2)
                   .attr('width', SeedNameBox.height - SeedNameBox.margin)
                   .attr('height', SeedNameBox.height - SeedNameBox.margin)
-                  .attr('viewBox', (d) => {
-                    return this.images[d.participant[0].name].position
-                  })
+                  .attr('viewBox', (d) => this.images[d.participant[0].name].position)
                 .append('image')
-                  .attr('xlink:href', require('@/assets/images/UEFA/clubs.png'))
+                  .attr('xlink:href', ClubsImage)
 
       upSeedNameBox.append('text')
                   .attr('class', 'username')
@@ -459,7 +458,7 @@ export default {
                     .attr('height', SeedNameBox.height)
                     .attr('fill', '#2E2F33')
                     .style('cursor', 'pointer')
-      // image load one by one
+      // // image load one by one
       // downSeedNameBox.append('image')
       //             .attr('x', 10)
       //             .attr('y', SeedNameBox.margin/2)
@@ -474,11 +473,9 @@ export default {
                   .attr('y', SeedNameBox.margin/2)
                   .attr('width', SeedNameBox.height - SeedNameBox.margin)
                   .attr('height', SeedNameBox.height - SeedNameBox.margin)
-                  .attr('viewBox', (d) => {
-                    return this.images[d.participant[1].name].position
-                  })
+                  .attr('viewBox', (d) => this.images[d.participant[1].name].position)
                 .append('image')
-                  .attr('xlink:href', require('@/assets/images/UEFA/clubs.png'))
+                  .attr('xlink:href', ClubsImage)
       
       downSeedNameBox.append('text')
                     .attr('class', 'username')
