@@ -79,6 +79,7 @@
 <script>
 import * as d3 from 'd3';
 const ClubsImage = require('../assets/images/UEFA/clubs.png')
+import imagePosition from '../models/uefa-image-sprite'
 
 export default {
   data() {
@@ -107,73 +108,7 @@ export default {
         tournament: null
       },
       currentHoveredUserBoxes: [],
-      currentHoveredUserPaths: [],
-      images: {
-        Ajax: {
-          position: '5 5 70 70'
-        },
-
-        'Atlético': {
-          position: '85 5 70 70'
-        },
-
-        Barcelona: {
-          position: '165 5 70 70'
-        },
-
-        Bayern: {
-          position: '245 5 70 70'
-        },
-
-        Dortmund: {
-          position: '5 85 70 70'
-        },
-
-        Juventus: {
-          position: '85 85 70 70'
-        },
-
-        'Liverpool': {
-          position: '165 85 70 70'
-        },
-
-        Lyon: {
-          position: '245 85 70 70'
-        },
-
-        'Man City': {
-          position: '5 165 70 70'
-        },
-
-        'Man. United': {
-          position: '85 165 70 70'
-        },
-
-        Paris: {
-          position: '165 165 70 70'
-        },
-
-        Porto: {
-          position: '245 165 70 70'
-        },
-
-        'Real Madrid': {
-          position: '5 245 70 70'
-        },
-
-        Roma: {
-          position: '85 245 70 70'
-        },
-
-        Schalke: {
-          position: '165 245 70 70'
-        },
-
-        Tottenham: {
-          position: '245 240 70 70'
-        }
-
-      }
+      currentHoveredUserPaths: []
     }
   },
   mounted() {
@@ -313,16 +248,6 @@ export default {
                                 d3.select(this).attr('transform', `translate(${margin.left}, ${firstMarginHeightInEachRound + marginHeightInEachRound*(iterateInSameRound-1)})`)
                               })
       
-      // fight.append('text')
-      //     .attr('class', 'number')
-      //     .text((d) => d.number)
-      //     .attr('x',0)
-      //     .attr('y', fightBox.height/2)
-      //     .attr('text-anchor','middle')
-      //     .attr('alignment-baseline','middle')
-      //     .attr('fill', '#8B8C8D')
-      //     .attr('font-size', 10)
-      
       function usernameMouseOver(e, fight, target, self) {
         const userId = d3.select(target).attr('data-user-id')
         const username = d3.select(target).text()
@@ -389,15 +314,6 @@ export default {
                   .attr('height', SeedNameBox.height)
                   .attr('fill', '#2E2F33')
                   .style('cursor', 'pointer')
-
-      // image load one by one
-      // upSeedNameBox.append('image')
-      //             .attr('x', 10)
-      //             .attr('y', SeedNameBox.margin/2)
-      //             .attr('width', SeedNameBox.height - SeedNameBox.margin)
-      //             .attr('height', SeedNameBox.height - SeedNameBox.margin)
-      //             .attr('xlink:href', (d) => require(`@/assets/images/UEFA/Clubs/${d.participant[0].name}.png`))
-
       // Image Sprite
       upSeedNameBox
                 .append('svg')
@@ -405,7 +321,7 @@ export default {
                   .attr('y', SeedNameBox.margin/2)
                   .attr('width', SeedNameBox.height - SeedNameBox.margin)
                   .attr('height', SeedNameBox.height - SeedNameBox.margin)
-                  .attr('viewBox', (d) => this.images[d.participant[0].name].position)
+                  .attr('viewBox', (d) => imagePosition[d.participant[0].name])
                 .append('image')
                   .attr('xlink:href', ClubsImage)
 
@@ -458,13 +374,6 @@ export default {
                     .attr('height', SeedNameBox.height)
                     .attr('fill', '#2E2F33')
                     .style('cursor', 'pointer')
-      // // image load one by one
-      // downSeedNameBox.append('image')
-      //             .attr('x', 10)
-      //             .attr('y', SeedNameBox.margin/2)
-      //             .attr('width', SeedNameBox.height - SeedNameBox.margin)
-      //             .attr('height', SeedNameBox.height - SeedNameBox.margin)
-      //             .attr('xlink:href', (d) => require(`@/assets/images/UEFA/Clubs/${d.participant[1].name}.png`))
 
       // Image Sprite
       downSeedNameBox
@@ -473,7 +382,7 @@ export default {
                   .attr('y', SeedNameBox.margin/2)
                   .attr('width', SeedNameBox.height - SeedNameBox.margin)
                   .attr('height', SeedNameBox.height - SeedNameBox.margin)
-                  .attr('viewBox', (d) => this.images[d.participant[1].name].position)
+                  .attr('viewBox', (d) => imagePosition[d.participant[1].name])
                 .append('image')
                   .attr('xlink:href', ClubsImage)
       
