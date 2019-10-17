@@ -8,7 +8,8 @@
         | Design Reference : 
         a(href="https://www.uefa.com/uefachampionsleague/" target="_blank") UEFA Homepage
         <br>
-        | Visaulization Tool : D3.js
+        | Skill : D3.js, Image Sprite
+
     .tounament-wrapper
       svg#root
       #tournament-navigation.m-3
@@ -105,15 +106,81 @@ export default {
         tournament: null
       },
       currentHoveredUserBoxes: [],
-      currentHoveredUserPaths: []
+      currentHoveredUserPaths: [],
+      images: {
+        Ajax: {
+          position: '5 5 70 70'
+        },
+
+        'Atlético': {
+          position: '85 5 70 70'
+        },
+
+        Barcelona: {
+          position: '165 5 70 70'
+        },
+
+        Bayern: {
+          position: '245 5 70 70'
+        },
+
+        Dortmund: {
+          position: '5 85 70 70'
+        },
+
+        Juventus: {
+          position: '85 85 70 70'
+        },
+
+        'Liverpool': {
+          position: '165 85 70 70'
+        },
+
+        Lyon: {
+          position: '245 85 70 70'
+        },
+
+        'Man City': {
+          position: '5 165 70 70'
+        },
+
+        'Man. United': {
+          position: '85 165 70 70'
+        },
+
+        Paris: {
+          position: '165 165 70 70'
+        },
+
+        Porto: {
+          position: '245 165 70 70'
+        },
+
+        'Real Madrid': {
+          position: '5 245 70 70'
+        },
+
+        Roma: {
+          position: '85 245 70 70'
+        },
+
+        Schalke: {
+          position: '165 245 70 70'
+        },
+
+        Tottenham: {
+          position: '245 240 70 70'
+        }
+
+      }
     }
   },
-  async mounted() {
+  mounted() {
     console.log('App Load')
-    await this.fetchData()
-    await this.initRootSvg()
-    await this.initRoundBanner()
-    await this.initTounament()
+    this.fetchData()
+    this.initRootSvg()
+    this.initRoundBanner()
+    this.initTounament()
   }, 
   methods: {
     fetchData(){
@@ -321,20 +388,28 @@ export default {
                   .attr('height', SeedNameBox.height)
                   .attr('fill', '#2E2F33')
                   .style('cursor', 'pointer')
-      // upSeedNameBox.append('text')
+
+      // image load one by one
+      // upSeedNameBox.append('image')
       //             .attr('x', 10)
-      //             .attr('y', SeedNameBox.height/2)
-      //             .attr('font-size', 12)
-      //             .attr('fill', '#304380')
-      //             .attr('text-anchor','start')
-      //             .attr('alignment-baseline','middle')
-      //             .text((d) => d.seed[0])
-      upSeedNameBox.append('image')
+      //             .attr('y', SeedNameBox.margin/2)
+      //             .attr('width', SeedNameBox.height - SeedNameBox.margin)
+      //             .attr('height', SeedNameBox.height - SeedNameBox.margin)
+      //             .attr('xlink:href', (d) => require(`@/assets/images/UEFA/Clubs/${d.participant[0].name}.png`))
+
+      // Image Sprite
+      upSeedNameBox
+                .append('svg')
                   .attr('x', 10)
                   .attr('y', SeedNameBox.margin/2)
                   .attr('width', SeedNameBox.height - SeedNameBox.margin)
                   .attr('height', SeedNameBox.height - SeedNameBox.margin)
-                  .attr('xlink:href', (d) => require(`@/assets/images/UEFA/${d.participant[0].name}.png`))
+                  .attr('viewBox', (d) => {
+                    return this.images[d.participant[0].name].position
+                  })
+                .append('image')
+                  .attr('xlink:href', require('@/assets/images/UEFA/clubs.png'))
+
       upSeedNameBox.append('text')
                   .attr('class', 'username')
                   .attr('x', 10 + SeedNameBox.height)
@@ -384,20 +459,27 @@ export default {
                     .attr('height', SeedNameBox.height)
                     .attr('fill', '#2E2F33')
                     .style('cursor', 'pointer')
-      // downSeedNameBox.append('text')
-      //               .attr('x', 10)
-      //               .attr('y', SeedNameBox.height/2 + margin.betweenBox)
-      //               .attr('font-size', 12)
-      //               .attr('fill', '#304380')
-      //               .attr('text-anchor','start')
-      //               .attr('alignment-baseline','middle')
-      //               .text((d) => d.seed[1])
-      downSeedNameBox.append('image')
+      // image load one by one
+      // downSeedNameBox.append('image')
+      //             .attr('x', 10)
+      //             .attr('y', SeedNameBox.margin/2)
+      //             .attr('width', SeedNameBox.height - SeedNameBox.margin)
+      //             .attr('height', SeedNameBox.height - SeedNameBox.margin)
+      //             .attr('xlink:href', (d) => require(`@/assets/images/UEFA/Clubs/${d.participant[1].name}.png`))
+
+      // Image Sprite
+      downSeedNameBox
+                .append('svg')
                   .attr('x', 10)
                   .attr('y', SeedNameBox.margin/2)
                   .attr('width', SeedNameBox.height - SeedNameBox.margin)
                   .attr('height', SeedNameBox.height - SeedNameBox.margin)
-                  .attr('xlink:href', (d) => require(`@/assets/images/UEFA/${d.participant[1].name}.png`))
+                  .attr('viewBox', (d) => {
+                    return this.images[d.participant[1].name].position
+                  })
+                .append('image')
+                  .attr('xlink:href', require('@/assets/images/UEFA/clubs.png'))
+      
       downSeedNameBox.append('text')
                     .attr('class', 'username')
                     .attr('x', 10 + SeedNameBox.height)

@@ -14,7 +14,7 @@
           li(@click="toggledClass=false")
             router-link.js-scroll-trigger(to='/finedust') 미세먼지
           li(@click="toggledClass=false")
-            router-link.js-scroll-trigger(to='/UEFAtournament') 2019 UEFA Champions League
+            router-link.js-scroll-trigger(to='/UEFAtournament') 18/19 UEFA Champions League
           //- li.dropdown
             span.dropdown__trigger Elements
             .dropdown__container(style='left: 119.5px;')
